@@ -1,0 +1,260 @@
+﻿using System;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using botiloid.gameBot;
+using botiloid.Subsidiary;
+
+namespace botiloid
+{
+    class KeyboardBotControl : IBotControl
+    {
+        /*
+        ---------------------------
+        |     |    uRec     |     |
+        |     |             |     |
+        |  l  |------------ |  r  |
+        |  R  |    |   |    |  R  |
+        |  e  |esL | C | esR|  e  |
+        |  c  |    |   |    |  c  |
+        |     |-------------|     |
+        |     |     dRec    |     |
+        |     |-------------|     |
+        |     |ldRec | rdRec|     |
+        ---------------------------
+        */
+        private Size viewPort;
+        private Rectangle uRec, dRec, dlRec, drRec, lRec, esLRec, rRec, esRRec, cRec;
+        private byte currentKey = 0;
+        private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
+        //private int midDist = 0, dcount = 0, midDistMemor = 0;
+        //private List<byte> curKeys, prevKeys;
+        private int upCorrection, downCorrection, lrCorrection;
+        private GlobalVarialbles gv = GlobalVarialbles.Constructor();
+
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
+        const uint KEYEVENTF_KEYUP = 0x0002;
+        const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
+
+        public KeyboardBotControl(Size viewPort)
+        {
+            this.viewPort = viewPort;
+
+            //initCorrections();
+            initScreenSpliting();
+            initBotCommands();
+        }
+
+        private void initCorrections()
+        {
+            upCorrection = (int)(viewPort.Height / 9 * 1.8);
+            downCorrection = (int)(viewPort.Height / 9 * 1.3);
+            lrCorrection = (int)(viewPort.Height / 12 * 0.8);
+        }
+        private void initScreenSpliting()
+        {
+            lRec = new Rectangle(new Point(0, 0),
+                                             new Size(viewPort.Width / 5, viewPort.Height));
+            rRec = new Rectangle(new Point(viewPort.Width - lRec.Width, 0),
+                                 new Size(lRec.Width, lRec.Height));
+            uRec = new Rectangle(new Point(lRec.Width, 0),
+                                 new Size(viewPort.Width - lRec.Width * 2, viewPort.Height / 3));
+            dRec = new Rectangle(new Point(lRec.Width, uRec.Height * 2),
+                                 new Size(uRec.Width, uRec.Height / 2));
+            dlRec = new Rectangle(new Point(dRec.Location.X, dRec.Location.Y + dRec.Height),
+                                  new Size(dRec.Width / 2, dRec.Height));
+            drRec = new Rectangle(new Point(dlRec.Location.X + dlRec.Width, dlRec.Y),
+                                  new Size(dlRec.Width, dlRec.Height));
+            esLRec = new Rectangle(new Point(lRec.Width, uRec.Height),
+                                   new Size((int)(lRec.Width * 1.3), uRec.Height));
+            esRRec = new Rectangle(new Point(viewPort.Width - rRec.Width - esLRec.Width, uRec.Height),
+                                   new Size(esLRec.Width, esLRec.Height));
+            cRec = new Rectangle(new Point(lRec.Width + esLRec.Width, uRec.Height),
+                                 new Size(viewPort.Width - lRec.Width * 2 - esLRec.Width * 2, uRec.Height));
+        }
+        private void initBotCommands()
+        {
+            com_down = (byte)gv.botKeys["down"];
+            com_up = (byte)gv.botKeys["up"];
+            com_left = (byte)gv.botKeys["left"];
+            com_right = (byte)gv.botKeys["right"];
+            com_esRight = (byte)gv.botKeys["esRight"];
+            com_esLeft = (byte)gv.botKeys["esLeft"];
+        }
+
+        /// <summary>
+        /// Перемещается к точке
+        /// </summary>
+        /// <param name="obj">poi</param>
+        /// <returns></returns>
+        public string moveTo(POIData poiDate)
+        {
+            //if (lastKey == BotKeys.Down)
+            //    obj.Y = obj.Y + upCorrection;
+            //if (lastKey == BotKeys.Up)
+            //    obj.Y = obj.Y - downCorrection;
+            //if (lastKey == BotKeys.EsLeft)
+            //    obj.X = obj.X + lrCorrection;
+            //if (lastKey == BotKeys.EsRight)
+            //    obj.X = obj.X - lrCorrection;
+
+            //if (currentKey != 0)
+            keybd_event(currentKey, 0, KEYEVENTF_KEYUP, 0);
+
+            if (poiDate == null)
+                return "not found";
+
+            var obj = poiDate.pt;
+            var command = "";
+
+            if (uRec.Contains(obj))
+            {
+                currentKey = com_down;
+                command = "up";
+            }
+            else if (dRec.Contains(obj))
+            {
+                currentKey = com_up;           
+                command = "down";
+            }
+            else if (lRec.Contains(obj) || dlRec.Contains(obj))
+            {
+                currentKey = com_left;
+                command = "left";
+            }
+            else if (esLRec.Contains(obj))
+            {
+                currentKey = com_esLeft;
+                command = "easy-left";
+            }
+            else if (rRec.Contains(obj) || drRec.Contains(obj))
+            {
+                currentKey = com_right;
+                command = "right";
+            }
+            else if (esRRec.Contains(obj))
+            {
+                currentKey = com_esRight;
+                command = "easy-right";
+            }
+            else if (cRec.Contains(obj))
+            {
+                command = "straight";
+                //currentKey = 0;
+                return command;
+            }
+
+            //int dist = 0;
+            //if (poiDate.dist.Length > 0)
+            //{
+            //    dist = Convert.ToInt32(poiDate.dist);
+            //    midDist += dist;
+            //    if (++dcount > 30)
+            //    {
+            //        dcount = 0;
+            //        midDistMemor = midDist / 30;
+            //    }
+            //}
+            //poiDate.midDist = midDistMemor;
+
+            keybd_event(currentKey, 0, 0, 0);
+
+            return command;
+        }
+
+        /// <summary>
+        /// Отменяет последнюю команду
+        /// </summary>
+        public void release()
+        {
+            keybd_event(currentKey, 0, KEYEVENTF_KEYUP, 0);
+        }
+
+        #region tests
+        //foreach (var item in prevKeys)
+        //    keybd_event(item, 0, KEYEVENTF_KEYUP, 0);
+
+        //lRec = new Rectangle(new Point(0, 0),
+        //                     new Size(viewPort.Width / 5, viewPort.Height));
+        //rRec = new Rectangle(new Point(viewPort.Width - lRec.Width, 0),
+        //                     new Size(lRec.Width, lRec.Height));
+        //uRec = new Rectangle(new Point(0, 0),
+        //                     new Size(viewPort.Width, viewPort.Height / 3));
+        //dRec = new Rectangle(new Point(lRec.Width, uRec.Height * 2),
+        //                     new Size(viewPort.Width - lRec.Width * 2, uRec.Height / 2));
+        //dlRec = new Rectangle(new Point(0, dRec.Location.Y + dRec.Height),
+        //                      new Size(uRec.Width / 2, dRec.Height));
+        //drRec = new Rectangle(new Point(dlRec.Location.X, dRec.Height),
+        //                      new Size(dlRec.Width, dlRec.Height));
+        //esLRec = new Rectangle(new Point(lRec.Width, uRec.Height),
+        //                       new Size((int)(lRec.Width * 1.3), uRec.Height));
+        //esRRec = new Rectangle(new Point(viewPort.Width - rRec.Width - esLRec.Width, uRec.Height),
+        //                       new Size(esLRec.Width, esLRec.Height));
+        //cRec = new Rectangle(new Point(lRec.Width + esLRec.Width, uRec.Height),
+        //                     new Size(viewPort.Width - lRec.Width * 2 - esLRec.Width * 2, uRec.Height));
+
+        //public string moveTo(POIDate poiDate)
+        //{
+        //    curKeys = new List<byte>(5);
+        //    var obj = poiDate.pt;
+
+        //    if (prevKeys.Contains(BotKeys.Down))
+        //        obj.Y = obj.Y + upCorrection;
+        //    if (prevKeys.Contains(BotKeys.Up))
+        //        obj.Y = obj.Y - downCorrection;
+        //    if (prevKeys.Contains(BotKeys.EsLeft))
+        //        obj.X = obj.X + lrCorrection;
+        //    if (prevKeys.Contains(BotKeys.EsRight))
+        //        obj.X = obj.X - lrCorrection;
+
+        //    var repCommands = "";
+        //    if (uRec.Contains(obj))
+        //    {
+        //        curKeys.Add(BotKeys.Down);
+        //        repCommands += "up\n";
+        //    }
+        //    if (dRec.Contains(obj))
+        //    {
+        //        curKeys.Add(BotKeys.Up);
+        //        repCommands += "down\n";
+        //    }
+        //    if (lRec.Contains(obj) || dlRec.Contains(obj))
+        //    {
+        //        curKeys.Add(BotKeys.Left);
+        //        repCommands += "left\n";
+        //    }
+        //    if (esLRec.Contains(obj))
+        //    {
+        //        curKeys.Add(BotKeys.EsLeft);
+        //        repCommands += "easy-left\n";
+        //    }
+        //    if (rRec.Contains(obj) || drRec.Contains(obj))
+        //    {
+        //        curKeys.Add(BotKeys.Right);
+        //        repCommands += "right\n";
+        //    }
+        //    if (esRRec.Contains(obj))
+        //    {
+        //        curKeys.Add(BotKeys.EsRight);
+        //        repCommands += "easy-right\n";
+        //    }
+        //    if (cRec.Contains(obj))
+        //    {
+        //        curKeys.Clear();
+        //        repCommands = "straight";
+        //    }
+
+        //    foreach (var item in prevKeys)
+        //        if (!curKeys.Contains(item))
+        //            keybd_event(item, 0, KEYEVENTF_KEYUP, 0);
+        //    foreach (var item in curKeys)
+        //        if (!prevKeys.Contains(item))
+        //            keybd_event(item, 0, KEYEVENTF_EXTENDEDKEY | 0, 0);
+
+        //    prevKeys = curKeys;
+        //    return repCommands;
+        //}
+        #endregion
+
+    }
+}
