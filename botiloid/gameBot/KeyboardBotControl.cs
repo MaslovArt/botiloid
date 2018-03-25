@@ -5,35 +5,37 @@ using botiloid.gameBot;
 using botiloid.Subsidiary;
 using System.Collections.Generic;
 using System.Threading;
+using System.Diagnostics;
 
 namespace botiloid
 {
     class KeyboardBotControl : IBotControl
     {
         /*
-        ---------------------------
-        |     |    uRec     |     |
-        |     |             |     |
-        |  l  |------------ |  r  |
-        |  R  |    |   |    |  R  |
-        |  e  |esL | C | esR|  e  |
-        |  c  |    |   |    |  c  |
-        |     |-------------|     |
-        |     |     dRec    |     |
-        |     |-------------|     |
-        |     |ldRec | rdRec|     |
-        ---------------------------
+        -----------------------------------
+        |         |     uReс    |         |
+        |         |             |         |
+        |  l      |------------ |  r      |
+        |  R      |    |   |    |  R      |
+        |  e      |esL | C | esR|  e      |
+        |  c      |    |   |    |  c      |
+        |         |-------------|         |
+        |         |     dRec    |         |
+        |         |-------------|         |
+        |         |ldRec | rdRec|         |
+        -----------------------------------
         */
         private Size viewPort;
         private Rectangle uRec, dRec, dlRec, drRec, lRec, esLRec, rRec, esRRec, cRec;
         private byte currentKey = 0;
         private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
 
-        private int upCorrection = 0;
         private bool flyUp = false;
         //private int midDist = 0, dcount = 0, midDistMemor = 0;
         private List<byte> curKeys = new List<byte>(5);
         private GlobalVarialbles gv = GlobalVarialbles.Constructor();
+
+        private Stopwatch sw = new Stopwatch();
 
         [DllImport("user32.dll")]
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
@@ -53,7 +55,7 @@ namespace botiloid
             lRec = new Rectangle(new Point(0, 0),
                                  new Size(viewPort.Width / 3, viewPort.Height));
             rRec = new Rectangle(new Point(viewPort.Width - lRec.Width, 0),
-                                 new Size(lRec.Width, lRec.Height));
+                                 lRec.Size);
             uRec = new Rectangle(new Point(lRec.Width, 0),
                                  new Size(viewPort.Width - lRec.Width * 2, viewPort.Height / 3));
             dRec = new Rectangle(new Point(lRec.Width, uRec.Height * 2),
@@ -61,11 +63,11 @@ namespace botiloid
             dlRec = new Rectangle(new Point(dRec.Location.X, dRec.Location.Y + dRec.Height),
                                   new Size(dRec.Width / 2, dRec.Height));
             drRec = new Rectangle(new Point(dlRec.Location.X + dlRec.Width, dlRec.Y),
-                                  new Size(dlRec.Width, dlRec.Height));
+                                  dlRec.Size);
             esLRec = new Rectangle(new Point(lRec.Width, uRec.Height),
                                    new Size((uRec.Width / 3), uRec.Height));
             esRRec = new Rectangle(new Point(viewPort.Width - rRec.Width - esLRec.Width, uRec.Height),
-                                   new Size(esLRec.Width, esLRec.Height));
+                                   esLRec.Size);
             cRec = new Rectangle(new Point(lRec.Width + esLRec.Width, uRec.Height),
                                  new Size(esLRec.Width, uRec.Height));
 
@@ -114,16 +116,12 @@ namespace botiloid
             var obj = poiDate.pt;
             var command = "";
 
-            if(flyUp)
-            {
-                upCorrection++;
-            }
-
             if (uRec.Contains(obj))
             {
                 currentKey = com_down;
+                flyUp = true;
+                sw.Restart();
                 command = "up";
-                //Thread.Sleep(150);
             }
             else if (dRec.Contains(obj))
             {
@@ -153,9 +151,20 @@ namespace botiloid
             else if (cRec.Contains(obj))
             {
                 command = "straight";
-                //currentKey = 0;
                 return command;
             }
+
+            keybd_event(currentKey, 0, 0, 0);
+
+            if (currentKey != com_down)
+                if (flyUp && sw.ElapsedMilliseconds < 300)
+                    keybd_event(com_down, 0, 0, 0);
+                else
+                {
+                    flyUp = false;
+                    keybd_event(com_down, 0, KEYEVENTF_KEYUP, 0);
+                }
+        
 
             //int dist = 0;
             //if (poiDate.dist.Length > 0)
@@ -170,7 +179,6 @@ namespace botiloid
             //}
             //poiDate.midDist = midDistMemor;
 
-            keybd_event(currentKey, 0, 0, 0);
 
             return command;
         }
