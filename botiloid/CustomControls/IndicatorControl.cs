@@ -44,7 +44,7 @@ namespace botiloid
             }
             set
             {
-                if (value <= 0)
+                if (value < 0)
                     return;
 
                 System.Media.SystemSounds.Beep.Play();

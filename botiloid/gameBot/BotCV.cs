@@ -3,7 +3,7 @@ using Emgu.CV;
 using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
-using Tesseract;
+using Emgu.CV.OCR;
 using System.Drawing;
 using System;
 
@@ -12,7 +12,8 @@ namespace botiloid
     class BotCV
     {
         private int Hmin, Smin, Vmin, Hmax, Smax, Vmax;
-        private TesseractEngine tess;
+        //private TesseractEngine tess;
+        private Emgu.CV.OCR.Tesseract tess;
         private ScreenCapture sc;
         private IntPtr winDiscript;
 
@@ -28,7 +29,7 @@ namespace botiloid
             sc = new ScreenCapture();
             winDiscript = win;
 
-            tess = new TesseractEngine(@"tessdata", "eng", EngineMode.Default);
+            tess = new Emgu.CV.OCR.Tesseract(@"", "eng", OcrEngineMode.TesseractOnly);
         }
 
         public Size ViewPort
@@ -93,19 +94,19 @@ namespace botiloid
                 imPart.ROI = roi;
                 imPart = imPart.Copy();
                 imPart = imPart.SmoothGaussian(1);
-                using (var page = tess.Process(imPart.ToBitmap()))
+
+                tess.SetImage(imPart);
+                tess.Recognize();
+                var t = tess.GetUTF8Text();
+                var filtDist = "";
+                for (int i = 0; i < t.Length; i++)
                 {
-                    var dist = page.GetText();
-                    var filtDist = "";
-                    for(int i = 0; i < dist.Length; i++)
-                    {
-                        if ((int)dist[i] > 47 && (int)dist[i] < 58 || (int)dist[i] == 46)
-                            filtDist += dist[i];
-                    }
-                    var pd = new POIData(rec.Location, filtDist);
-                    fr = imPart.ToBitmap();
-                    return pd;
+                    if ((int)t[i] > 47 && (int)t[i] < 58 || (int)t[i] == 46)
+                        filtDist += t[i];
                 }
+                var pd = new POIData(rec.Location, filtDist);
+                fr = imPart.ToBitmap();
+                return pd;
             }
             fr = null;
             return null;

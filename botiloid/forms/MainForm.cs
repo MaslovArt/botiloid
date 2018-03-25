@@ -19,6 +19,7 @@ namespace botiloid
         private SimplePlaneControler spc;
         private int com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_run, com_pause, com_fire;
         private bool isVisible = true, wasRecoding = false;
+        Emgu.CV.OCR.Tesseract tes;
 
 
         public MainForm()
@@ -42,12 +43,10 @@ namespace botiloid
 
             initKeyboardHook();
             initBot();
-
         }
 
         private void initBot()
         {
-
             gameBot = new GameBot();
             gameBot.onStateChange += (e) =>
             {
