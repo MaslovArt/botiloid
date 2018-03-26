@@ -31,6 +31,7 @@ namespace botiloid
         private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
 
         private bool flyUp = false;
+        private bool notFound = false;
         private int midDist = 0, dcount = 0, midDistMemor = 0;
         private List<byte> curKeys = new List<byte>(5);
         private GlobalVarialbles gv = GlobalVarialbles.Constructor();
@@ -53,16 +54,16 @@ namespace botiloid
         private void initScreenSpliting()
         {
             lRec = new Rectangle(new Point(0, 0),
-                                 new Size(viewPort.Width / 3, viewPort.Height));
+                                 new Size(viewPort.Width / 4, viewPort.Height));
             rRec = new Rectangle(new Point(viewPort.Width - lRec.Width, 0),
                                  lRec.Size);
             uRec = new Rectangle(new Point(lRec.Width, 0),
                                  new Size(viewPort.Width - lRec.Width * 2, viewPort.Height / 3));
             dRec = new Rectangle(new Point(lRec.Width, uRec.Height * 2),
                                  new Size(uRec.Width, uRec.Height / 2));
-            dlRec = new Rectangle(new Point(dRec.Location.X, dRec.Location.Y + dRec.Height),
+            dlRec = new Rectangle(new Point(dRec.Location.X, dRec.Bottom),
                                   new Size(dRec.Width / 2, dRec.Height));
-            drRec = new Rectangle(new Point(dlRec.Location.X + dlRec.Width, dlRec.Y),
+            drRec = new Rectangle(new Point(dlRec.Right, dlRec.Y),
                                   dlRec.Size);
             esLRec = new Rectangle(new Point(lRec.Width, uRec.Height),
                                    new Size((uRec.Width / 3), uRec.Height));
@@ -70,27 +71,8 @@ namespace botiloid
                                    esLRec.Size);
             cRec = new Rectangle(new Point(lRec.Width + esLRec.Width, uRec.Height),
                                  new Size(esLRec.Width, uRec.Height));
-
-            //lRec = new Rectangle(new Point(0, 0),
-            //                     new Size(viewPort.Width / 3, viewPort.Height));
-            //rRec = new Rectangle(new Point(viewPort.Width - lRec.Width, 0),
-            //                     lRec.Size);
-            //uRec = new Rectangle(new Point(0, 0),
-            //                     new Size(viewPort.Width, viewPort.Height / 3));
-            //dRec = new Rectangle(new Point(0, uRec.Height * 2),
-            //                     new Size(uRec.Width, uRec.Height / 2));
-            //dlRec = new Rectangle(new Point(dRec.Location.X, dRec.Location.Y + dRec.Height),
-            //                      new Size(dRec.Width / 2, dRec.Height));
-            //drRec = new Rectangle(new Point(dlRec.Location.X + dlRec.Width, dlRec.Y),
-            //                      dlRec.Size);
-            //esLRec = new Rectangle(new Point(lRec.Width, uRec.Height),
-            //                       new Size((uRec.Width / 9), uRec.Height));
-            //esRRec = new Rectangle(new Point(esLRec.X + esLRec.Width * 2, esLRec.Height),
-            //                       esLRec.Size);
-            //cRec = new Rectangle(new Point(lRec.Width + esLRec.Width, uRec.Height),
-            //                     new Size(esLRec.Width, uRec.Height));
-
         }
+
         private void initBotCommands()
         {
             com_down = (byte)gv.botKeys["down"];
@@ -192,81 +174,104 @@ namespace botiloid
         public void release()
         {
             keybd_event(currentKey, 0, KEYEVENTF_KEYUP, 0);
-            //foreach (var item in curKeys)
-            //    keybd_event(item, 0, KEYEVENTF_KEYUP, 0);
         }
+
+
+
+
 
         #region tests
-        public string moveTo2(POIData poiDate)
-        {
-            foreach (var item in curKeys)
-                keybd_event(item, 0, KEYEVENTF_KEYUP, 0);
+        //foreach (var item in curKeys)
+        //    keybd_event(item, 0, KEYEVENTF_KEYUP, 0);
 
-            if (poiDate == null)
-                return "not found";
+        //lRec = new Rectangle(new Point(0, 0),
+        //                     new Size(viewPort.Width / 3, viewPort.Height));
+        //rRec = new Rectangle(new Point(viewPort.Width - lRec.Width, 0),
+        //                     lRec.Size);
+        //uRec = new Rectangle(new Point(0, 0),
+        //                     new Size(viewPort.Width, viewPort.Height / 3));
+        //dRec = new Rectangle(new Point(0, uRec.Height * 2),
+        //                     new Size(uRec.Width, uRec.Height / 2));
+        //dlRec = new Rectangle(new Point(dRec.Location.X, dRec.Location.Y + dRec.Height),
+        //                      new Size(dRec.Width / 2, dRec.Height));
+        //drRec = new Rectangle(new Point(dlRec.Location.X + dlRec.Width, dlRec.Y),
+        //                      dlRec.Size);
+        //esLRec = new Rectangle(new Point(lRec.Width, uRec.Height),
+        //                       new Size((uRec.Width / 9), uRec.Height));
+        //esRRec = new Rectangle(new Point(esLRec.X + esLRec.Width * 2, esLRec.Height),
+        //                       esLRec.Size);
+        //cRec = new Rectangle(new Point(lRec.Width + esLRec.Width, uRec.Height),
+        //                     new Size(esLRec.Width, uRec.Height));
 
-            curKeys.Clear();
+        //public string moveTo2(POIData poiDate)
+        //{
+        //    foreach (var item in curKeys)
+        //        keybd_event(item, 0, KEYEVENTF_KEYUP, 0);
 
-            var obj = poiDate.pt;
-            //if (flyUp)
-            //    upCorrection++;
+        //    if (poiDate == null)
+        //        return "not found";
 
-            var repCommands = "";
-            if (cRec.Contains(obj))
-            {
-                curKeys.Clear();
-                repCommands = "straight";
-            }
-            else
-            {
-                if (uRec.Contains(obj))
-                {
-                    flyUp = true;
-                    curKeys.Add(com_down);
-                    repCommands += "up ";
-                }
-                else if (dRec.Contains(obj))
-                {
-                    curKeys.Add(com_up);
-                    repCommands += "down ";
-                }
-                if (lRec.Contains(obj) || dlRec.Contains(obj))
-                {
-                    curKeys.Add(com_left);
-                    repCommands += "left ";
-                }
-                else if (rRec.Contains(obj) || drRec.Contains(obj))
-                {
-                    curKeys.Add(com_right);
-                    repCommands += "right ";
-                }
-                if (esLRec.Contains(obj))
-                {
-                    curKeys.Add(com_esLeft);
-                    repCommands += "easy-left ";
-                }
-                else if (esRRec.Contains(obj))
-                {
-                    curKeys.Add(com_esRight);
-                    repCommands += "easy-right ";
-                }
-            }
+        //    curKeys.Clear();
 
-            //if(flyUp && upCorrection < 15 && !curKeys.Contains(com_up))
-            //{
-            //    curKeys.Add(com_up);
-            //    upCorrection = 0;
-            //    flyUp = false;
-            //}
+        //    var obj = poiDate.pt;
+        //    //if (flyUp)
+        //    //    upCorrection++;
+
+        //    var repCommands = "";
+        //    if (cRec.Contains(obj))
+        //    {
+        //        curKeys.Clear();
+        //        repCommands = "straight";
+        //    }
+        //    else
+        //    {
+        //        if (uRec.Contains(obj))
+        //        {
+        //            flyUp = true;
+        //            curKeys.Add(com_down);
+        //            repCommands += "up ";
+        //        }
+        //        else if (dRec.Contains(obj))
+        //        {
+        //            curKeys.Add(com_up);
+        //            repCommands += "down ";
+        //        }
+        //        if (lRec.Contains(obj) || dlRec.Contains(obj))
+        //        {
+        //            curKeys.Add(com_left);
+        //            repCommands += "left ";
+        //        }
+        //        else if (rRec.Contains(obj) || drRec.Contains(obj))
+        //        {
+        //            curKeys.Add(com_right);
+        //            repCommands += "right ";
+        //        }
+        //        if (esLRec.Contains(obj))
+        //        {
+        //            curKeys.Add(com_esLeft);
+        //            repCommands += "easy-left ";
+        //        }
+        //        else if (esRRec.Contains(obj))
+        //        {
+        //            curKeys.Add(com_esRight);
+        //            repCommands += "easy-right ";
+        //        }
+        //    }
+
+        //    //if(flyUp && upCorrection < 15 && !curKeys.Contains(com_up))
+        //    //{
+        //    //    curKeys.Add(com_up);
+        //    //    upCorrection = 0;
+        //    //    flyUp = false;
+        //    //}
 
 
-            foreach (var item in curKeys)
-                keybd_event(item, 0, 0, 0);
+        //    foreach (var item in curKeys)
+        //        keybd_event(item, 0, 0, 0);
 
-            return repCommands;
-        }
+        //    return repCommands;
+        //}
     
         #endregion
-
     }
 }
