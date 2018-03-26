@@ -12,7 +12,6 @@ namespace botiloid
     class BotCV
     {
         private int Hmin, Smin, Vmin, Hmax, Smax, Vmax;
-        //private TesseractEngine tess;
         private Emgu.CV.OCR.Tesseract tess;
         private ScreenCapture sc;
         private IntPtr winDiscript;
@@ -29,7 +28,7 @@ namespace botiloid
             sc = new ScreenCapture();
             winDiscript = win;
 
-            tess = new Emgu.CV.OCR.Tesseract(@"", "eng", OcrEngineMode.TesseractOnly);
+            tess = new Tesseract(@"", "eng", OcrEngineMode.TesseractOnly);
         }
 
         public Size ViewPort
