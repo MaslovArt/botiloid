@@ -60,6 +60,7 @@ namespace botiloid
         /// </summary>
         public event Action<POIData> onCommandReport;
 
+        private Stopwatch sw = new Stopwatch();
         public event Action<Object> botDebug;
 
         public GameBot()
@@ -181,6 +182,8 @@ namespace botiloid
                 POIData defPOI = new POIData(new Point(-1, -1), "-");
                 while (true)
                 {
+
+                    sw.Restart();
                     if (token.IsCancellationRequested)
                     {
                         if (bc != null)
@@ -193,9 +196,10 @@ namespace botiloid
                         obj = defPOI;
                     else
                         obj.command = com;
+                    sw.Stop();
+                    obj.fps = 1000 / sw.ElapsedMilliseconds;
                     if (onCommandReport != null)
                         onCommandReport(obj);
-                    Task.Delay(50);
                 }
             }, token);
         }

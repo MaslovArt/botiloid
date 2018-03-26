@@ -58,6 +58,7 @@
             this.подключениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.информацияПодключенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelfps = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbVisualiz)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.debugPB)).BeginInit();
@@ -211,6 +212,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.labelfps);
             this.panel1.Controls.Add(this.logLabel1);
             this.panel1.Controls.Add(this.labelLogs);
             this.panel1.Controls.Add(this.iC_ConnectStatus);
@@ -368,6 +370,15 @@
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.ToolStripSettings_Click);
             // 
+            // labelfps
+            // 
+            this.labelfps.AutoSize = true;
+            this.labelfps.Location = new System.Drawing.Point(338, 11);
+            this.labelfps.Name = "labelfps";
+            this.labelfps.Size = new System.Drawing.Size(31, 20);
+            this.labelfps.TabIndex = 18;
+            this.labelfps.Text = "fps";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -433,6 +444,7 @@
         private System.Windows.Forms.ToolStripMenuItem ToolStripModeLearning;
         private System.Windows.Forms.Label labelLogs;
         private CustomControls.LogLabel logLabel1;
+        private System.Windows.Forms.Label labelfps;
     }
 }
 

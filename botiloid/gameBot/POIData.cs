@@ -8,6 +8,7 @@ namespace botiloid
         public string dist;
         public int midDist;
         public string command;
+        public double fps;
         public Bitmap test;
 
         public POIData(Point pt, string dist)

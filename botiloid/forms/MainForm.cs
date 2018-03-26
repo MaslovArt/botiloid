@@ -81,6 +81,7 @@ namespace botiloid
                     labelDist.Text = "Distance: " + e.midDist.ToString();
                     labelDebug.Text = e.dist;
                     labelCommand.Text = "Command: " + e.command;
+                    labelfps.Text = e.fps.ToString();
                 }));
             };
 
