@@ -101,7 +101,7 @@ namespace botiloid
                 var filtDist = "";
                 for (int i = 0; i < t.Length; i++)
                 {
-                    if ((int)t[i] > 47 && (int)t[i] < 58 || (int)t[i] == 46)
+                    if ((int)t[i] > 47 && (int)t[i] < 58)
                         filtDist += t[i];
                 }
                 var pd = new POIData(rec.Location, filtDist);

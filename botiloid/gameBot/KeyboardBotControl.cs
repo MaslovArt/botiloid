@@ -31,7 +31,7 @@ namespace botiloid
         private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
 
         private bool flyUp = false;
-        //private int midDist = 0, dcount = 0, midDistMemor = 0;
+        private int midDist = 0, dcount = 0, midDistMemor = 0;
         private List<byte> curKeys = new List<byte>(5);
         private GlobalVarialbles gv = GlobalVarialbles.Constructor();
 
@@ -164,17 +164,20 @@ namespace botiloid
                     flyUp = false;
                     keybd_event(com_down, 0, KEYEVENTF_KEYUP, 0);
                 }
-        
 
-            //int dist = 0;
-            //if (poiDate.dist.Length > 0)
+
+            //if (poiDate.dist.Length > 1)
             //{
+            //    int dist = 0;
             //    dist = Convert.ToInt32(poiDate.dist);
-            //    midDist += dist;
-            //    if (++dcount > 30)
+            //    if (dist > 10)
             //    {
-            //        dcount = 0;
-            //        midDistMemor = midDist / 30;
+            //        midDist += dist;
+            //        if (++dcount > 60)
+            //        {
+            //            dcount = 0;
+            //            midDistMemor = midDist / 60;
+            //        }
             //    }
             //}
             //poiDate.midDist = midDistMemor;
