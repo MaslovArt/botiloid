@@ -7,6 +7,7 @@ using System.Threading;
 using System.Drawing;
 using botiloid.Subsidiary;
 using System.Windows.Forms;
+using botiloid.gameBot;
 
 namespace botiloid
 {
@@ -176,7 +177,7 @@ namespace botiloid
         private void botWork(CancellationToken token)
         {
             if (bc == null)
-                bc = new KeyboardBotControl(cv.ViewPort);
+                bc = new KeyboardTimerBotControl(cv.ViewPort);
             Task.Run(() =>
             {
                 POIData defPOI = new POIData(new Point(-1, -1), "-");

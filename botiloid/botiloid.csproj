@@ -79,6 +79,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="gameBot\BotLearning.cs" />
+    <Compile Include="gameBot\KeyboardTimerBotControl.cs" />
     <Compile Include="Subsidiary\DataSerialezer.cs" />
     <Compile Include="gameBot\SimplePlaneControler.cs" />
     <Compile Include="CustomControls\IndicatorControl.cs">
@@ -87,7 +88,6 @@
     <Compile Include="server\ClientAddress.cs" />
     <Compile Include="gameBot\KeyboardBotControl.cs" />
     <Compile Include="gameBot\BotCV.cs" />
-    <Compile Include="gameBot\BotKeys.cs" />
     <Compile Include="gameBot\BotNotInitException.cs" />
     <Compile Include="forms\MainForm.cs">
       <SubType>Form</SubType>
