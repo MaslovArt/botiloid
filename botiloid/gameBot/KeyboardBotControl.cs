@@ -1,13 +1,10 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Runtime.InteropServices;
-using botiloid.gameBot;
 using botiloid.Subsidiary;
 using System.Collections.Generic;
-using System.Threading;
 using System.Diagnostics;
 
-namespace botiloid
+namespace botiloid.gameBot
 {
     class KeyboardBotControl : IBotControl
     {

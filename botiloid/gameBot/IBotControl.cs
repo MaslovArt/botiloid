@@ -1,4 +1,4 @@
-﻿namespace botiloid
+﻿namespace botiloid.gameBot
 {
     interface IBotControl
     {

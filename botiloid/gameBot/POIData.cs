@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace botiloid
+namespace botiloid.gameBot
 {
     class POIData
     {

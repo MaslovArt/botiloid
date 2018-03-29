@@ -5,11 +5,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Drawing;
-using botiloid.Subsidiary;
-using System.Windows.Forms;
-using botiloid.gameBot;
 
-namespace botiloid
+namespace botiloid.gameBot
 {
     class GameBot
     {

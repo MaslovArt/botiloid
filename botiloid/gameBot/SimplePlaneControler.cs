@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using botiloid.Subsidiary;
-using System.Threading.Tasks;
 using System.Timers;
 
 namespace botiloid.gameBot

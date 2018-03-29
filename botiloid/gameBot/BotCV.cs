@@ -7,7 +7,7 @@ using Emgu.CV.OCR;
 using System.Drawing;
 using System;
 
-namespace botiloid
+namespace botiloid.gameBot
 {
     class BotCV
     {
