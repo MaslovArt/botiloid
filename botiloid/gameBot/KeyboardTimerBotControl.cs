@@ -9,26 +9,16 @@ namespace botiloid.gameBot
 {
     class KeyboardTimerBotControl : IBotControl
     {
-        /*
-        -----------------------------------
-        |         |     uReс    |         |
-        |         |             |         |
-        |  l      |------------ |  r      |
-        |  R      |    |   |    |  R      |
-        |  e      |esL | C | esR|  e      |
-        |  c      |    |   |    |  c      |
-        |         |-------------|         |
-        |         |     dRec    |         |
-        |         |-------------|         |
-        |         |ldRec | rdRec|         |
-        -----------------------------------
-        */
-
         private class keyPresser : IComparable
         {
             public byte code;
             public int times;
 
+            public keyPresser()
+            {
+                code = 0;
+                times = -1;
+            }
             public keyPresser(byte code, int times)
             {
                 this.code = code;
@@ -40,18 +30,30 @@ namespace botiloid.gameBot
                 var _obj = (keyPresser)obj;
                 return code - _obj.code;
             }
+
+            public override bool Equals(object obj)
+            {
+                return code == ((keyPresser)obj).code;
+            }
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
         }
 
         private Size viewPort;
-        private Rectangle uRec, dRec, dlRec, drRec, lRec, esLRec, rRec, esRRec, cRec;
+        private Point scCenter; 
         private byte currentKey = 0;
         private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
 
-        private List<byte> curKeys = new List<byte>(5);
+        private int cor_pitch = 100, cor_roll = 100, cor_yaw = 40;
+        private int rollStep, pitchStep;
+
+        private List<byte> curKeys = new List<byte>(3);
         private GlobalVarialbles gv = GlobalVarialbles.Constructor();
 
         private Timer timer;
-        private HashSet<keyPresser> currentCmds = new HashSet<keyPresser>();
+        private List<keyPresser> currentCmds = new List<keyPresser>(3);
 
         [DllImport("user32.dll")]
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
@@ -61,10 +63,11 @@ namespace botiloid.gameBot
         public KeyboardTimerBotControl(Size viewPort)
         {
             this.viewPort = viewPort;
-
-            initScreenSpliting();
             initBotCommands();
+            scCenter = new Point(viewPort.Width / 2, viewPort.Height / 2);
 
+            rollStep = viewPort.Width / 8;
+            pitchStep = viewPort.Height / 5;
             timer = new Timer(70);
             timer.Elapsed += Timer_Elapsed;
             timer.Enabled = true;
@@ -73,35 +76,9 @@ namespace botiloid.gameBot
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             foreach (var cmd in currentCmds)
-            {
                 if(--cmd.times < 1)
-                {
-                    keybd_event(currentKey, 0, KEYEVENTF_KEYUP, 0);
-                    currentCmds.Remove(cmd);
-                }
-            }
-        }
-
-        private void initScreenSpliting()
-        {
-            lRec = new Rectangle(new Point(0, 0),
-                                 new Size(viewPort.Width / 4, viewPort.Height));
-            rRec = new Rectangle(new Point(viewPort.Width - lRec.Width, 0),
-                                 lRec.Size);
-            uRec = new Rectangle(new Point(lRec.Width, 0),
-                                 new Size(viewPort.Width - lRec.Width * 2, viewPort.Height / 3));
-            dRec = new Rectangle(new Point(lRec.Width, uRec.Height * 2),
-                                 new Size(uRec.Width, uRec.Height / 2));
-            dlRec = new Rectangle(new Point(dRec.Location.X, dRec.Bottom),
-                                  new Size(dRec.Width / 2, dRec.Height));
-            drRec = new Rectangle(new Point(dlRec.Right, dlRec.Y),
-                                  dlRec.Size);
-            esLRec = new Rectangle(new Point(lRec.Width, uRec.Height),
-                                   new Size((uRec.Width / 3), uRec.Height));
-            esRRec = new Rectangle(new Point(viewPort.Width - rRec.Width - esLRec.Width, uRec.Height),
-                                   esLRec.Size);
-            cRec = new Rectangle(new Point(lRec.Width + esLRec.Width, uRec.Height),
-                                 new Size(esLRec.Width, uRec.Height));
+                    if (currentCmds.Remove(cmd))
+                        keybd_event(cmd.code, 0, KEYEVENTF_KEYUP, 0);
         }
 
         private void initBotCommands()
@@ -128,48 +105,72 @@ namespace botiloid.gameBot
                 timer.Enabled = true;
 
             var obj = poiDate.pt;
-            var command = "";
+            var command = string.Empty;
 
-            if (uRec.Contains(obj))
+            //if (obj.X > scCenter.X + cor_yaw && obj.X < scCenter.X + cor_roll)
+            //{
+            //    command = "yaw-right ";
+            //    putCmd(com_esRight, 3);
+            //}
+            //else if (obj.X < scCenter.X - cor_yaw && obj.X > scCenter.X - cor_roll)
+            //{
+            //    command = "yaw-left ";
+            //    putCmd(com_esLeft, 3);
+            //}
+
+            if(obj.X > scCenter.X + cor_roll ||
+               (obj.X > scCenter.X && obj.Y > viewPort.Height - 60))
             {
-                currentKey = com_down;
-                command = "up";
+                var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep;
+                command += "right" + moveTime + " ";
+                putCmd(com_right, moveTime);
             }
-            else if (dRec.Contains(obj))
+            else if (obj.X < scCenter.X - cor_roll ||
+                     (obj.X < scCenter.X && obj.Y > viewPort.Height - 60))
             {
-                currentKey = com_up;
-                command = "down";
-            }
-            else if (lRec.Contains(obj) || dlRec.Contains(obj))
-            {
-                currentKey = com_left;
-                command = "left";
-            }
-            else if (esLRec.Contains(obj))
-            {
-                currentKey = com_esLeft;
-                command = "easy-left";
-            }
-            else if (rRec.Contains(obj) || drRec.Contains(obj))
-            {
-                currentKey = com_right;
-                command = "right";
-            }
-            else if (esRRec.Contains(obj))
-            {
-                currentKey = com_esRight;
-                command = "easy-right";
-            }
-            else if (cRec.Contains(obj))
-            {
-                command = "straight";
-                return command;
+                var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep;
+                command += "left" + moveTime + " ";
+                putCmd(com_left, moveTime);
             }
 
-            currentCmds.Add(new keyPresser(currentKey, 1));
-            keybd_event(currentKey, 0, 0, 0);
+            if ((obj.X > 120 && obj.X < viewPort.Width - 120 &&
+                obj.Y < viewPort.Height - 60))
+            {
+                if (obj.Y > scCenter.Y + cor_pitch)
+                {
+                    command += "down ";
+                    putOrUpdateCmd(com_up, 5);
+                }
+                else if (obj.Y < scCenter.Y - cor_pitch)
+                {
+                    command += "up ";
+                    putOrUpdateCmd(com_down, 5);
+                }
+            }
+
+            if (command == string.Empty)
+                command = "streight";
 
             return command;
+        }
+
+        private void putCmd(byte code, int moveTime)
+        {
+            var newCmd = new keyPresser(code, moveTime);
+            if (currentCmds.Contains(newCmd))
+                return;
+            currentCmds.Add(newCmd);
+            keybd_event(code, 0, 0, 0);
+        }
+        private void putOrUpdateCmd(byte code, int moveTime)
+        {
+            for (int i = 0; i < currentCmds.Count; i++)
+                if (currentCmds[i].code == code)
+                {
+                    currentCmds[i].times = moveTime;
+                    return;
+                }
+            putCmd(code, moveTime);
         }
 
         /// <summary>
