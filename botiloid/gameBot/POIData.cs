@@ -1,20 +1,28 @@
 ﻿using System.Drawing;
+using System;
 
 namespace botiloid.gameBot
 {
     class POIData
     {
         public Point pt;
-        public string dist;
-        public int midDist;
+        public int dist;
         public string command;
+        public int speed;
         public double fps;
-        public Bitmap test;
 
         public POIData(Point pt, string dist)
         {
             this.pt = pt;
-            this.dist = dist;
+            try
+            {
+                this.dist = Convert.ToInt32(dist);
+            }
+            catch (Exception ex)
+            {
+                this.dist = -1;
+            }
+            
         }
     }
 }

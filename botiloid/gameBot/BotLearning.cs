@@ -73,7 +73,6 @@ namespace botiloid.gameBot
             var cmdsBuffer = "";
             Task.Run(()=>
             {
-                Bitmap m;
                 while(true)
                 {
                     if (token.IsCancellationRequested)
@@ -85,7 +84,7 @@ namespace botiloid.gameBot
                         break;
                     }
 
-                    var poidata = bc.detectObj(out m);
+                    var poidata = bc.detectObj();
                     Point pt = poidata == null ? new Point(-1, -1) : poidata.pt;
                     cmdsBuffer += String.Format(template, getPressedKeys(), pt.X, pt.Y);
                     if (++iteration > 1000)

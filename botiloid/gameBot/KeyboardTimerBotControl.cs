@@ -43,9 +43,9 @@ namespace botiloid.gameBot
 
         private Size viewPort;
         private Point scCenter; 
-        private byte currentKey = 0;
         private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
 
+        private int lowSpeedCor = 0;
         private int cor_pitch = 100, cor_roll = 100, cor_yaw = 40;
         private int rollStep, pitchStep;
 
@@ -107,32 +107,42 @@ namespace botiloid.gameBot
             var obj = poiDate.pt;
             var command = string.Empty;
 
-            //if (obj.X > scCenter.X + cor_yaw && obj.X < scCenter.X + cor_roll)
-            //{
-            //    command = "yaw-right ";
-            //    putCmd(com_esRight, 3);
-            //}
-            //else if (obj.X < scCenter.X - cor_yaw && obj.X > scCenter.X - cor_roll)
-            //{
-            //    command = "yaw-left ";
-            //    putCmd(com_esLeft, 3);
-            //}
+            //yaw correction
+            if (lowSpeedCor == 5)
+            {
+                if (obj.X > scCenter.X + cor_yaw && obj.X < scCenter.X + cor_roll)
+                {
+                    command = "yaw-right ";
+                    putCmd(com_esRight, 3);
+                }
+                else if (obj.X < scCenter.X - cor_yaw && obj.X > scCenter.X - cor_roll)
+                {
+                    command = "yaw-left ";
+                    putCmd(com_esLeft, 3);
+                }
+            }
 
-            if(obj.X > scCenter.X + cor_roll ||
+            //roll correction
+            if (obj.X > scCenter.X + cor_roll ||
                (obj.X > scCenter.X && obj.Y > viewPort.Height - 60))
             {
-                var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep;
+                var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
+                               ? 3
+                               : 1;
                 command += "right" + moveTime + " ";
                 putCmd(com_right, moveTime);
             }
             else if (obj.X < scCenter.X - cor_roll ||
                      (obj.X < scCenter.X && obj.Y > viewPort.Height - 60))
             {
-                var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep;
+                var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
+                               ? 3
+                               : 1;
                 command += "left" + moveTime + " ";
                 putCmd(com_left, moveTime);
             }
 
+            //pitch correction
             if ((obj.X > 120 && obj.X < viewPort.Width - 120 &&
                 obj.Y < viewPort.Height - 60))
             {
@@ -144,8 +154,24 @@ namespace botiloid.gameBot
                 else if (obj.Y < scCenter.Y - cor_pitch)
                 {
                     command += "up ";
-                    putOrUpdateCmd(com_down, 5);
+                    putOrUpdateCmd(com_down, 5 + lowSpeedCor);
                 }
+            }
+
+            //speed correction
+            if (obj.X < 10 || obj.X > viewPort.Width - 10 ||
+                obj.Y < 10 || obj.Y > viewPort.Height - 10)
+            { poiDate.speed = 100; lowSpeedCor = 0; }
+            else
+            {
+                if (poiDate.dist >= 90)
+                { poiDate.speed = 100; lowSpeedCor = 0; }
+                else if (poiDate.dist >= 70 && poiDate.dist < 80)
+                { poiDate.speed = 75; lowSpeedCor = 1; }
+                else if (poiDate.dist >= 50 && poiDate.dist < 60)
+                { poiDate.speed = 50; lowSpeedCor = 3; }
+                else if (poiDate.dist >= 10 && poiDate.dist < 40)
+                { poiDate.speed = 30; lowSpeedCor = 5; }
             }
 
             if (command == string.Empty)

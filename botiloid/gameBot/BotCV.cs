@@ -15,6 +15,8 @@ namespace botiloid.gameBot
         private Emgu.CV.OCR.Tesseract tess;
         private ScreenCapture sc;
         private IntPtr winDiscript;
+        private int distReqest = 0;
+        private string filtDist = "";
 
         public BotCV(IntPtr win, int Hmin, int Smin, int Vmin, int Hmax, int Smax, int Vmax)
         {
@@ -62,8 +64,8 @@ namespace botiloid.gameBot
         /// Находит объект
         /// </summary>
         /// <param name="processedFrame"></param>
-        /// <returns>Координаты объекта</returns>
-        public POIData detectObj(out Bitmap fr)
+        /// <returns>Возвращает координаты объекта. Если оюъект не найден возвращает null.</returns>
+        public POIData detectObj()
         {
             var frame = sc.PrintWindow(winDiscript);
             var processedFrameSt = ProcessImage(frame);
@@ -88,26 +90,28 @@ namespace botiloid.gameBot
             var rec = PointCollection.BoundingRectangle(pList.ToArray());
             if (rec.Width > 0)
             {
-                Rectangle roi = new Rectangle(new Point(rec.Location.X - 1, rec.Location.Y - 3), new Size(27, 14));
-                var imPart = processedFrameSt;
-                imPart.ROI = roi;
-                imPart = imPart.Copy();
-                imPart = imPart.SmoothGaussian(1);
-
-                tess.SetImage(imPart);
-                tess.Recognize();
-                var t = tess.GetUTF8Text();
-                var filtDist = "";
-                for (int i = 0; i < t.Length; i++)
+                if (++distReqest > 25)
                 {
-                    if ((int)t[i] > 47 && (int)t[i] < 58)
-                        filtDist += t[i];
+                    Rectangle roi = new Rectangle(new Point(rec.Location.X - 1, rec.Location.Y - 3), new Size(27, 14));
+                    var imPart = processedFrameSt;
+                    imPart.ROI = roi;
+                    imPart = imPart.Copy();
+                    imPart = imPart.SmoothGaussian(1);
+                    filtDist = "";
+                    tess.SetImage(imPart);
+                    tess.Recognize();
+                    var t = tess.GetUTF8Text();
+                    for (int i = 0; i < t.Length; i++)
+                    {
+                        if ((int)t[i] > 47 && (int)t[i] < 58)
+                            filtDist += t[i];
+                    }
+                    if (filtDist.Length > 1)
+                        distReqest = 0;
                 }
                 var pd = new POIData(rec.Location, filtDist);
-                fr = imPart.ToBitmap();
                 return pd;
             }
-            fr = null;
             return null;
         }
     }

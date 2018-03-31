@@ -188,7 +188,7 @@ namespace botiloid.gameBot
                             bc.release();
                         break;
                     }
-                    var obj = getPoiDate();
+                    var obj = cv.detectObj();
                     var com = bc.moveTo(obj);
                     if (obj == null)
                         obj = defPOI;
@@ -221,10 +221,7 @@ namespace botiloid.gameBot
         /// <returns></returns>
         private POIData getPoiDate()
         {
-            Bitmap debBit;
-            var obj = cv.detectObj(out debBit);
-            if (botDebug != null)
-                botDebug(debBit);
+            var obj = cv.detectObj();
             return obj;
         }
 

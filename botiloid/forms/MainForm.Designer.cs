@@ -35,19 +35,14 @@
             this.labelCommand = new System.Windows.Forms.Label();
             this.labelDist = new System.Windows.Forms.Label();
             this.labelObjPoint = new System.Windows.Forms.Label();
-            this.debugPB = new System.Windows.Forms.PictureBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.logLabel1 = new botiloid.CustomControls.LogLabel();
+            this.labelfps = new System.Windows.Forms.Label();
             this.labelLogs = new System.Windows.Forms.Label();
-            this.iC_ConnectStatus = new botiloid.IndicatorControl();
-            this.iC_BotStatus = new botiloid.IndicatorControl();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.labelDebug = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ботToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripStart = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,16 +53,17 @@
             this.подключениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.информацияПодключенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelfps = new System.Windows.Forms.Label();
+            this.logLabel1 = new botiloid.CustomControls.LogLabel();
+            this.iC_ConnectStatus = new botiloid.IndicatorControl();
+            this.iC_BotStatus = new botiloid.IndicatorControl();
+            this.labelSpeed = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbVisualiz)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.debugPB)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iC_ConnectStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.iC_BotStatus)).BeginInit();
-            this.groupBox3.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -94,6 +90,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.labelSpeed);
             this.groupBox1.Controls.Add(this.pbVisualiz);
             this.groupBox1.Controls.Add(this.labelCommand);
             this.groupBox1.Controls.Add(this.labelDist);
@@ -140,15 +137,6 @@
             this.labelObjPoint.Size = new System.Drawing.Size(14, 20);
             this.labelObjPoint.TabIndex = 12;
             this.labelObjPoint.Text = "-";
-            // 
-            // debugPB
-            // 
-            this.debugPB.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.debugPB.Location = new System.Drawing.Point(202, 21);
-            this.debugPB.Name = "debugPB";
-            this.debugPB.Size = new System.Drawing.Size(155, 102);
-            this.debugPB.TabIndex = 11;
-            this.debugPB.TabStop = false;
             // 
             // groupBox2
             // 
@@ -212,7 +200,6 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.panel1.Controls.Add(this.labelfps);
             this.panel1.Controls.Add(this.logLabel1);
             this.panel1.Controls.Add(this.labelLogs);
             this.panel1.Controls.Add(this.iC_ConnectStatus);
@@ -223,13 +210,14 @@
             this.panel1.Size = new System.Drawing.Size(405, 42);
             this.panel1.TabIndex = 15;
             // 
-            // logLabel1
+            // labelfps
             // 
-            this.logLabel1.AutoEllipsis = true;
-            this.logLabel1.Location = new System.Drawing.Point(140, 11);
-            this.logLabel1.Name = "logLabel1";
-            this.logLabel1.Size = new System.Drawing.Size(233, 20);
-            this.logLabel1.TabIndex = 18;
+            this.labelfps.AutoSize = true;
+            this.labelfps.Location = new System.Drawing.Point(9, 357);
+            this.labelfps.Name = "labelfps";
+            this.labelfps.Size = new System.Drawing.Size(31, 20);
+            this.labelfps.TabIndex = 18;
+            this.labelfps.Text = "fps";
             // 
             // labelLogs
             // 
@@ -238,51 +226,6 @@
             this.labelLogs.Name = "labelLogs";
             this.labelLogs.Size = new System.Drawing.Size(0, 20);
             this.labelLogs.TabIndex = 18;
-            // 
-            // iC_ConnectStatus
-            // 
-            this.iC_ConnectStatus.BackgroundImage = global::botiloid.Properties.Resources.icr;
-            this.iC_ConnectStatus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.iC_ConnectStatus.Location = new System.Drawing.Point(114, 11);
-            this.iC_ConnectStatus.MainTitle = null;
-            this.iC_ConnectStatus.Name = "iC_ConnectStatus";
-            this.iC_ConnectStatus.Size = new System.Drawing.Size(20, 20);
-            this.iC_ConnectStatus.Status = 0;
-            this.iC_ConnectStatus.TabIndex = 9;
-            this.iC_ConnectStatus.TabStop = false;
-            // 
-            // iC_BotStatus
-            // 
-            this.iC_BotStatus.BackgroundImage = global::botiloid.Properties.Resources.icr;
-            this.iC_BotStatus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.iC_BotStatus.Location = new System.Drawing.Point(84, 11);
-            this.iC_BotStatus.MainTitle = null;
-            this.iC_BotStatus.Name = "iC_BotStatus";
-            this.iC_BotStatus.Size = new System.Drawing.Size(20, 20);
-            this.iC_BotStatus.Status = 0;
-            this.iC_BotStatus.TabIndex = 8;
-            this.iC_BotStatus.TabStop = false;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.labelDebug);
-            this.groupBox3.Controls.Add(this.debugPB);
-            this.groupBox3.Location = new System.Drawing.Point(16, 376);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(373, 129);
-            this.groupBox3.TabIndex = 16;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Debug";
-            // 
-            // labelDebug
-            // 
-            this.labelDebug.AutoSize = true;
-            this.labelDebug.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelDebug.Location = new System.Drawing.Point(10, 41);
-            this.labelDebug.Name = "labelDebug";
-            this.labelDebug.Size = new System.Drawing.Size(102, 37);
-            this.labelDebug.TabIndex = 16;
-            this.labelDebug.Text = "label2";
             // 
             // menuStrip1
             // 
@@ -370,21 +313,53 @@
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.ToolStripSettings_Click);
             // 
-            // labelfps
+            // logLabel1
             // 
-            this.labelfps.AutoSize = true;
-            this.labelfps.Location = new System.Drawing.Point(338, 11);
-            this.labelfps.Name = "labelfps";
-            this.labelfps.Size = new System.Drawing.Size(31, 20);
-            this.labelfps.TabIndex = 18;
-            this.labelfps.Text = "fps";
+            this.logLabel1.AutoEllipsis = true;
+            this.logLabel1.Location = new System.Drawing.Point(140, 11);
+            this.logLabel1.Name = "logLabel1";
+            this.logLabel1.Size = new System.Drawing.Size(233, 20);
+            this.logLabel1.TabIndex = 18;
+            // 
+            // iC_ConnectStatus
+            // 
+            this.iC_ConnectStatus.BackgroundImage = global::botiloid.Properties.Resources.icr;
+            this.iC_ConnectStatus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.iC_ConnectStatus.Location = new System.Drawing.Point(114, 11);
+            this.iC_ConnectStatus.MainTitle = null;
+            this.iC_ConnectStatus.Name = "iC_ConnectStatus";
+            this.iC_ConnectStatus.Size = new System.Drawing.Size(20, 20);
+            this.iC_ConnectStatus.Status = 0;
+            this.iC_ConnectStatus.TabIndex = 9;
+            this.iC_ConnectStatus.TabStop = false;
+            // 
+            // iC_BotStatus
+            // 
+            this.iC_BotStatus.BackgroundImage = global::botiloid.Properties.Resources.icr;
+            this.iC_BotStatus.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.iC_BotStatus.Location = new System.Drawing.Point(84, 11);
+            this.iC_BotStatus.MainTitle = null;
+            this.iC_BotStatus.Name = "iC_BotStatus";
+            this.iC_BotStatus.Size = new System.Drawing.Size(20, 20);
+            this.iC_BotStatus.Status = 0;
+            this.iC_BotStatus.TabIndex = 8;
+            this.iC_BotStatus.TabStop = false;
+            // 
+            // labelSpeed
+            // 
+            this.labelSpeed.AutoSize = true;
+            this.labelSpeed.Location = new System.Drawing.Point(10, 97);
+            this.labelSpeed.Name = "labelSpeed";
+            this.labelSpeed.Size = new System.Drawing.Size(14, 20);
+            this.labelSpeed.TabIndex = 16;
+            this.labelSpeed.Text = "-";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(405, 517);
-            this.Controls.Add(this.groupBox3);
+            this.ClientSize = new System.Drawing.Size(405, 386);
+            this.Controls.Add(this.labelfps);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.labelClose);
             this.Controls.Add(this.groupBox2);
@@ -397,17 +372,14 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbVisualiz)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.debugPB)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.iC_ConnectStatus)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.iC_BotStatus)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iC_ConnectStatus)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.iC_BotStatus)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -423,13 +395,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.PictureBox debugPB;
         private System.Windows.Forms.Label labelCommand;
         private System.Windows.Forms.Label labelDist;
         private System.Windows.Forms.Label labelObjPoint;
         private System.Windows.Forms.PictureBox pbVisualiz;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Label labelDebug;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ботToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ToolStripStart;
@@ -445,6 +414,7 @@
         private System.Windows.Forms.Label labelLogs;
         private CustomControls.LogLabel logLabel1;
         private System.Windows.Forms.Label labelfps;
+        private System.Windows.Forms.Label labelSpeed;
     }
 }
 

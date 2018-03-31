@@ -19,8 +19,6 @@ namespace botiloid
         private SimplePlaneControler spc;
         private int com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_run, com_pause, com_fire;
         private bool isVisible = true, wasRecoding = false;
-        Emgu.CV.OCR.Tesseract tes;
-
 
         public MainForm()
         {
@@ -78,18 +76,11 @@ namespace botiloid
                 labelObjPoint.Invoke(new Action(() =>
                 {
                     labelObjPoint.Text = "Obj: " + e.pt.ToString();
-                    labelDist.Text = "Distance: " + e.midDist.ToString();
-                    labelDebug.Text = e.dist;
+                    labelDist.Text = "Distance: " + e.dist.ToString();
                     labelCommand.Text = "Command: " + e.command;
-                    labelfps.Text = e.fps.ToString();
-                }));
-            };
-
-            gameBot.botDebug += (e) =>
-            {
-                debugPB.Invoke(new Action(() =>
-                {
-                    debugPB.BackgroundImage = e as Bitmap;
+                    labelfps.Text = "fps " + e.fps.ToString();
+                    if (e.speed > 0)
+                        labelSpeed.Text = "Speed " + e.speed + "%";
                 }));
             };
         }
