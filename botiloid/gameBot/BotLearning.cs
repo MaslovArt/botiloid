@@ -55,7 +55,7 @@ namespace botiloid.gameBot
         /// <summary>
         /// Запускает запись команд
         /// </summary>
-        /// <param name="token"></param>
+        /// <param name="token">Источник признака отмены</param>
         public void StartRecordAsync(CancellationToken token)
         {
             if (isRecording)
@@ -99,7 +99,10 @@ namespace botiloid.gameBot
             }, token);
         }
         
-
+        /// <summary>
+        /// Получает список зажатых клавишь
+        /// </summary>
+        /// <returns>Строка с символами клавишь</returns>
         private string getPressedKeys()
         {
             var res = "";

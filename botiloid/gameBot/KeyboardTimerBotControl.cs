@@ -73,6 +73,9 @@ namespace botiloid.gameBot
             timer.Enabled = true;
         }
 
+        /// <summary>
+        /// Управляет временем жизни команд
+        /// </summary>
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             foreach (var cmd in currentCmds)
@@ -81,6 +84,9 @@ namespace botiloid.gameBot
                         keybd_event(cmd.code, 0, KEYEVENTF_KEYUP, 0);
         }
 
+        /// <summary>
+        /// Инициализирует клавиши для управления
+        /// </summary>
         private void initBotCommands()
         {
             com_down = (byte)gv.botKeys["down"];
@@ -94,8 +100,8 @@ namespace botiloid.gameBot
         /// <summary>
         /// Перемещается к точке
         /// </summary>
-        /// <param name="obj">poi</param>
-        /// <returns></returns>
+        /// <param name="obj">Данные приследуемого объекта</param>
+        /// <returns>Возвращает выполняемые команды. Если их нет, то 'not found'</returns>
         public string moveTo(POIData poiDate)
         {
             if (poiDate == null)
@@ -180,6 +186,11 @@ namespace botiloid.gameBot
             return command;
         }
 
+        /// <summary>
+        /// Добавляет команду в список исполняемых команд и запускает ее если такой команды нет.
+        /// </summary>
+        /// <param name="code">Код клавиши</param>
+        /// <param name="moveTime">Время жизни команды</param>
         private void putCmd(byte code, int moveTime)
         {
             var newCmd = new keyPresser(code, moveTime);
@@ -188,6 +199,11 @@ namespace botiloid.gameBot
             currentCmds.Add(newCmd);
             keybd_event(code, 0, 0, 0);
         }
+        /// <summary>
+        /// Добавляет команду в список исполняемых команд и запускает ее. Если команда уже есть то обновляет ее.
+        /// </summary>
+        /// <param name="code">Код клавиши</param>
+        /// <param name="moveTime">Время жизни команды</param>
         private void putOrUpdateCmd(byte code, int moveTime)
         {
             for (int i = 0; i < currentCmds.Count; i++)
@@ -200,7 +216,7 @@ namespace botiloid.gameBot
         }
 
         /// <summary>
-        /// Отменяет последнюю команду
+        /// Завершает выполнение всех текущих команд
         /// </summary>
         public void release()
         {

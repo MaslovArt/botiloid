@@ -16,8 +16,6 @@ namespace botiloid.gameBot
         private Timer timer_cmdsBreaker = new Timer(250);
 
         private Queue<byte> cmds = new Queue<byte>(4);
-        private byte currentKey = 0;
-        private byte prevKey = 0;
 
         public SimplePlaneControler()
         {
@@ -26,6 +24,9 @@ namespace botiloid.gameBot
             timer_cmdsBreaker.Elapsed += Timer_cmdsBreaker_Elapsed;
         }
 
+        /// <summary>
+        /// Завершает команду по истечению времени
+        /// </summary>
         private void Timer_cmdsBreaker_Elapsed(object sender, ElapsedEventArgs e)
         {
             if(cmds.Count > 0)
@@ -35,6 +36,9 @@ namespace botiloid.gameBot
             }
         }
 
+        /// <summary>
+        /// Инициализирует клавиши для управления
+        /// </summary>
         private void initBotCommands()
         {
             com_down = (byte)gv.botKeys["down"];
@@ -45,11 +49,16 @@ namespace botiloid.gameBot
             com_esLeft = (byte)gv.botKeys["esLeft"];
         }
 
+        /// <summary>
+        /// Эмулирует нажатие клавиши
+        /// </summary>
+        /// <param name="code">Код клавиши</param>
         private void PressKey(byte code)
         {
             keybd_event(code, 0, 0, 0);
             cmds.Enqueue(code);
         }
+
         public void Left()
         {
             PressKey(com_left);

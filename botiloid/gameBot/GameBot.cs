@@ -58,6 +58,9 @@ namespace botiloid.gameBot
         /// </summary>
         public event Action<POIData> onCommandReport;
 
+        /// <summary>
+        /// Замер fps
+        /// </summary>
         private Stopwatch sw = new Stopwatch();
         public event Action<Object> botDebug;
 
@@ -122,7 +125,7 @@ namespace botiloid.gameBot
         }
 
         /// <summary>
-        /// Запуск
+        /// Запуск бота в выбранном режиме (по умолчанию Mode.Default)
         /// </summary>
         public void RunAsync()
         {
@@ -168,9 +171,9 @@ namespace botiloid.gameBot
         }
 
         /// <summary>
-        /// Запускает бота в фоновом режиме
+        /// Робота бота в Mode.Default
         /// </summary>
-        /// <param name="token">Прерывает работу бота</param>
+        /// <param name="token">Источник признака отмены</param>
         private void botWork(CancellationToken token)
         {
             if (bc == null)
@@ -203,26 +206,15 @@ namespace botiloid.gameBot
         }
 
         /// <summary>
-        /// Запись команд полета
+        /// Работа бота в Mode.Learning (запись полета)
         /// </summary>
-        /// <param name="token">Прерывает обучение</param>
+        /// <param name="token">Источник признака отмены</param>
         private void botLearning(CancellationToken token)
         {
             if (bl == null)
                 bl = new BotLearning(cv);
 
             bl.StartRecordAsync(token);        
-        }
-
-        /// <summary>
-        /// Захват изображения из процесса
-        /// </summary>
-        /// <param name="obj">Обнаруженный объект</param>
-        /// <returns></returns>
-        private POIData getPoiDate()
-        {
-            var obj = cv.detectObj();
-            return obj;
         }
 
         /// <summary>

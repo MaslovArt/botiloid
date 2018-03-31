@@ -18,7 +18,7 @@ namespace botiloid.gameBot
             {
                 this.dist = Convert.ToInt32(dist);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 this.dist = -1;
             }

@@ -28,8 +28,6 @@ namespace botiloid.gameBot
         private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
 
         private bool flyUp = false;
-        private bool notFound = false;
-        private int midDist = 0, dcount = 0, midDistMemor = 0;
         private List<byte> curKeys = new List<byte>(5);
         private GlobalVarialbles gv = GlobalVarialbles.Constructor();
 

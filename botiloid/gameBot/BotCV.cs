@@ -63,7 +63,6 @@ namespace botiloid.gameBot
         /// <summary>
         /// Находит объект
         /// </summary>
-        /// <param name="processedFrame"></param>
         /// <returns>Возвращает координаты объекта. Если оюъект не найден возвращает null.</returns>
         public POIData detectObj()
         {
