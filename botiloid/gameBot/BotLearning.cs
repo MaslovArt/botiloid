@@ -21,9 +21,8 @@ namespace botiloid.gameBot
         private string template;
         private string extention = ".txt";
 
-        private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
-        Keys fireKey;
-        private string speed = "0";
+        private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_fire;
+        private string speed = "D0";
         private int flaps = 1;
         private int dist = -1;
         private bool isFire = false;
@@ -43,7 +42,7 @@ namespace botiloid.gameBot
             delay = 1000 / Convert.ToInt32(gv.learning["times"]);
             template = gv.learning["template"];
             filePath = gv.learning["path"];
-            fireKey = gv.botKeys["fire"];
+            com_fire = (byte)gv.botKeys["fire"];
 
             com_down = (byte)gv.botKeys["down"];
             com_up = (byte)gv.botKeys["up"];
@@ -58,7 +57,7 @@ namespace botiloid.gameBot
 
         private void Gkl_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == fireKey)
+            if ((byte)e.KeyCode == com_fire)
             {
                 isFire = false;
                 return;
@@ -69,7 +68,7 @@ namespace botiloid.gameBot
         {
             if ((int)e.KeyCode < 58)
                 speed = e.KeyCode.ToString();
-            if (e.KeyCode == fireKey)
+            if ((byte)e.KeyCode == com_fire)
             {
                 isFire = true;
                 return;
@@ -91,7 +90,6 @@ namespace botiloid.gameBot
                 return;
 
             isRecording = true;
-            System.Media.SystemSounds.Question.Play();
             var fs = File.Create(filePath + "/" +
                                  DateTime.Now.ToShortDateString() +
                                  "-" + DateTime.Now.Hour + "_" +
@@ -119,7 +117,7 @@ namespace botiloid.gameBot
                     dist = poidata.dist;
                     //template = "{0}{1}\t{2}\t{3}\t{4}\t{5}\t{6}";
                     cmdsBuffer = String.Format(template, getPressedKeys(),
-                                                          speed,
+                                                          speed[1],
                                                           flaps,
                                                           isFire ? "1" : "0",
                                                           pt.X, pt.Y,
