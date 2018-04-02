@@ -5,15 +5,12 @@ using System;
 using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
-using System.IO;
-using System.Threading;
 
 namespace botiloid
 {
     public partial class MainForm : Form
     {
         private GameBot gameBot;
-        private Hotkey hook;
         private string pattern = @"il2.*";
         private NetManager.NMClient nmClient;
         private SimplePlaneControler spc;
@@ -71,9 +68,9 @@ namespace botiloid
                     }
                 }));
             };
-            gameBot.onCommandReport += (e) =>
+            gameBot.onDataReport += (e) =>
             {
-                labelObjPoint.Invoke(new Action(() =>
+                Invoke(new Action(() =>
                 {
                     labelObjPoint.Text = "Obj: " + e.pt.ToString();
                     labelDist.Text = "Distance: " + e.dist.ToString();
@@ -86,7 +83,7 @@ namespace botiloid
         }
         private void initKeyboardHook()
         {
-            hook = new Hotkey();
+            Hotkey hook = new Hotkey();
             hook.registerHotkey(Modifier.Ctrl, Keys.B, (e)=> 
             {
                 Visible = !Visible;
@@ -99,7 +96,10 @@ namespace botiloid
                 dtn = DateTime.Now;
 
                 if (gameBot.Status < GameBot.State.Ready)
+                {
+                    MessageBox.Show("Бот не инициализирован!");
                     return;
+                }
 
                 if (gameBot.Status == GameBot.State.Active)
                 {
@@ -182,6 +182,7 @@ namespace botiloid
             var sets = new Settings();
             sets.ShowDialog();
         }
+
         private void ToolStripModes_Click(object sender, EventArgs e)
         {
             ToolStripModeDefault.Checked = false;

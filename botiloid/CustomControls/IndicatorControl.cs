@@ -10,7 +10,7 @@ namespace botiloid
 {
     class IndicatorControl : PictureBox
     {
-        private int status = 0;
+        private int status;
         private string mainTitle;
         public event Action<object, int> StatusChange;
         private ToolTip tooltip;
@@ -24,6 +24,7 @@ namespace botiloid
                 if (stateTitles != null)
                     tooltip.Show(mainTitle + ": " + stateTitles[status], this, 3000);
             });
+            status = 0;
         }
 
         public string MainTitle
@@ -44,7 +45,7 @@ namespace botiloid
             }
             set
             {
-                if (value < 0)
+                if (value < 0 || value == status)
                     return;
 
                 System.Media.SystemSounds.Beep.Play();

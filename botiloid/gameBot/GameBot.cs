@@ -56,7 +56,7 @@ namespace botiloid.gameBot
         /// <summary>
         /// Событие поступления данных объекта
         /// </summary>
-        public event Action<POIData> onCommandReport;
+        public event Action<POIData> onDataReport;
 
         /// <summary>
         /// Замер fps
@@ -199,8 +199,8 @@ namespace botiloid.gameBot
                         obj.command = com;
                     sw.Stop();
                     obj.fps = 1000 / sw.ElapsedMilliseconds;
-                    if (onCommandReport != null)
-                        onCommandReport(obj);
+                    if (onDataReport != null)
+                        onDataReport(obj);
                 }
             }, token);
         }
