@@ -31,7 +31,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.labelClose = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.pbVisualiz = new System.Windows.Forms.PictureBox();
+            this.labelServCmd = new System.Windows.Forms.Label();
+            this.labelSpeed = new System.Windows.Forms.Label();
             this.labelCommand = new System.Windows.Forms.Label();
             this.labelDist = new System.Windows.Forms.Label();
             this.labelObjPoint = new System.Windows.Forms.Label();
@@ -41,8 +42,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.labelfps = new System.Windows.Forms.Label();
             this.labelLogs = new System.Windows.Forms.Label();
+            this.labelfps = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ботToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripStart = new System.Windows.Forms.ToolStripMenuItem();
@@ -53,12 +54,11 @@
             this.подключениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.информацияПодключенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.logLabel1 = new botiloid.CustomControls.LogLabel();
             this.iC_ConnectStatus = new botiloid.IndicatorControl();
             this.iC_BotStatus = new botiloid.IndicatorControl();
-            this.labelSpeed = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbVisualiz)).BeginInit();
             this.groupBox2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -79,6 +79,7 @@
             // 
             this.labelClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.labelClose.AutoSize = true;
+            this.labelClose.Cursor = System.Windows.Forms.Cursors.Hand;
             this.labelClose.Location = new System.Drawing.Point(377, 7);
             this.labelClose.Name = "labelClose";
             this.labelClose.Size = new System.Drawing.Size(16, 20);
@@ -90,26 +91,35 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.labelServCmd);
             this.groupBox1.Controls.Add(this.labelSpeed);
-            this.groupBox1.Controls.Add(this.pbVisualiz);
             this.groupBox1.Controls.Add(this.labelCommand);
             this.groupBox1.Controls.Add(this.labelDist);
             this.groupBox1.Controls.Add(this.labelObjPoint);
             this.groupBox1.Location = new System.Drawing.Point(16, 111);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(373, 135);
+            this.groupBox1.Size = new System.Drawing.Size(373, 153);
             this.groupBox1.TabIndex = 13;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Команда";
+            this.groupBox1.Text = "Данные бота";
             // 
-            // pbVisualiz
+            // labelServCmd
             // 
-            this.pbVisualiz.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.pbVisualiz.Location = new System.Drawing.Point(218, 25);
-            this.pbVisualiz.Name = "pbVisualiz";
-            this.pbVisualiz.Size = new System.Drawing.Size(139, 90);
-            this.pbVisualiz.TabIndex = 15;
-            this.pbVisualiz.TabStop = false;
+            this.labelServCmd.AutoSize = true;
+            this.labelServCmd.Location = new System.Drawing.Point(10, 117);
+            this.labelServCmd.Name = "labelServCmd";
+            this.labelServCmd.Size = new System.Drawing.Size(14, 20);
+            this.labelServCmd.TabIndex = 17;
+            this.labelServCmd.Text = "-";
+            // 
+            // labelSpeed
+            // 
+            this.labelSpeed.AutoSize = true;
+            this.labelSpeed.Location = new System.Drawing.Point(10, 97);
+            this.labelSpeed.Name = "labelSpeed";
+            this.labelSpeed.Size = new System.Drawing.Size(14, 20);
+            this.labelSpeed.TabIndex = 16;
+            this.labelSpeed.Text = "-";
             // 
             // labelCommand
             // 
@@ -146,7 +156,7 @@
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.label4);
             this.groupBox2.Controls.Add(this.label3);
-            this.groupBox2.Location = new System.Drawing.Point(16, 252);
+            this.groupBox2.Location = new System.Drawing.Point(16, 270);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(373, 100);
             this.groupBox2.TabIndex = 14;
@@ -205,19 +215,10 @@
             this.panel1.Controls.Add(this.iC_ConnectStatus);
             this.panel1.Controls.Add(this.iC_BotStatus);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(0, 36);
+            this.panel1.Location = new System.Drawing.Point(0, 40);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(405, 42);
             this.panel1.TabIndex = 15;
-            // 
-            // labelfps
-            // 
-            this.labelfps.AutoSize = true;
-            this.labelfps.Location = new System.Drawing.Point(9, 357);
-            this.labelfps.Name = "labelfps";
-            this.labelfps.Size = new System.Drawing.Size(31, 20);
-            this.labelfps.TabIndex = 18;
-            this.labelfps.Text = "fps";
             // 
             // labelLogs
             // 
@@ -227,13 +228,23 @@
             this.labelLogs.Size = new System.Drawing.Size(0, 20);
             this.labelLogs.TabIndex = 18;
             // 
+            // labelfps
+            // 
+            this.labelfps.AutoSize = true;
+            this.labelfps.Location = new System.Drawing.Point(12, 373);
+            this.labelfps.Name = "labelfps";
+            this.labelfps.Size = new System.Drawing.Size(31, 20);
+            this.labelfps.TabIndex = 18;
+            this.labelfps.Text = "fps";
+            // 
             // menuStrip1
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ботToolStripMenuItem,
             this.серверToolStripMenuItem,
-            this.настройкиToolStripMenuItem});
+            this.настройкиToolStripMenuItem,
+            this.справкаToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(405, 33);
@@ -313,6 +324,12 @@
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.ToolStripSettings_Click);
             // 
+            // справкаToolStripMenuItem
+            // 
+            this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
+            this.справкаToolStripMenuItem.Size = new System.Drawing.Size(93, 29);
+            this.справкаToolStripMenuItem.Text = "Справка";
+            // 
             // logLabel1
             // 
             this.logLabel1.AutoEllipsis = true;
@@ -345,20 +362,11 @@
             this.iC_BotStatus.TabIndex = 8;
             this.iC_BotStatus.TabStop = false;
             // 
-            // labelSpeed
-            // 
-            this.labelSpeed.AutoSize = true;
-            this.labelSpeed.Location = new System.Drawing.Point(10, 97);
-            this.labelSpeed.Name = "labelSpeed";
-            this.labelSpeed.Size = new System.Drawing.Size(14, 20);
-            this.labelSpeed.TabIndex = 16;
-            this.labelSpeed.Text = "-";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(405, 386);
+            this.ClientSize = new System.Drawing.Size(405, 401);
             this.Controls.Add(this.labelfps);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.labelClose);
@@ -369,9 +377,11 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Form1";
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelUp_MouseDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panelUp_MouseMove);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panelUp_MouseUp);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pbVisualiz)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -398,7 +408,6 @@
         private System.Windows.Forms.Label labelCommand;
         private System.Windows.Forms.Label labelDist;
         private System.Windows.Forms.Label labelObjPoint;
-        private System.Windows.Forms.PictureBox pbVisualiz;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem ботToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ToolStripStart;
@@ -415,6 +424,8 @@
         private CustomControls.LogLabel logLabel1;
         private System.Windows.Forms.Label labelfps;
         private System.Windows.Forms.Label labelSpeed;
+        private System.Windows.Forms.ToolStripMenuItem справкаToolStripMenuItem;
+        private System.Windows.Forms.Label labelServCmd;
     }
 }
 

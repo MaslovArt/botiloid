@@ -13,7 +13,7 @@ namespace botiloid.gameBot
         const uint KEYEVENTF_EXTENDEDKEY = 0x0001;
         private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_fire;
         private GlobalVarialbles gv = GlobalVarialbles.Constructor();
-        private Timer timer_cmdsBreaker = new Timer(250);
+        private Timer timer_cmdsBreaker = new Timer(500);
 
         private Queue<byte> cmds = new Queue<byte>(4);
 
@@ -29,10 +29,11 @@ namespace botiloid.gameBot
         /// </summary>
         private void Timer_cmdsBreaker_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if(cmds.Count > 0)
+            while(cmds.Count > 0)
             {
                 var breakCmd = cmds.Dequeue();
                 keybd_event(breakCmd, 0, KEYEVENTF_KEYUP, 0);
+                timer_cmdsBreaker.Enabled = false;
             }
         }
 
@@ -57,6 +58,9 @@ namespace botiloid.gameBot
         {
             keybd_event(code, 0, 0, 0);
             cmds.Enqueue(code);
+
+            if (!timer_cmdsBreaker.Enabled)
+                timer_cmdsBreaker.Enabled = true;
         }
 
         public void Left()

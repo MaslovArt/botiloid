@@ -49,7 +49,7 @@ namespace botiloid.server
             {
                 MessageBox.Show("Ошибка заполнения полей!");
             }
-            DialogResult = DialogResult.OK;
+            this.DialogResult = DialogResult.OK;
         }
     }
 }

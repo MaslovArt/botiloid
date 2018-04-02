@@ -113,22 +113,55 @@ namespace botiloid.gameBot
             var obj = poiDate.pt;
             var command = string.Empty;
 
-            //yaw correction
-            if (lowSpeedCor == 5)
+            yawMoves(obj, ref command);
+
+            rollMoves(obj, ref command);
+
+            pitchMoves(obj, ref command);
+
+            speedCorrection(poiDate, obj);
+
+            if (command == string.Empty)
+                command = "streight";
+
+            return command;
+        }
+        private void speedCorrection(POIData poiDate, Point obj)
+        {
+            if (obj.X < 10 || obj.X > viewPort.Width - 10 ||
+                            obj.Y < 10 || obj.Y > viewPort.Height - 10)
+            { poiDate.speed = 100; lowSpeedCor = 0; }
+            else
             {
-                if (obj.X > scCenter.X + cor_yaw && obj.X < scCenter.X + cor_roll)
+                if (poiDate.dist >= 90)
+                { poiDate.speed = 100; lowSpeedCor = 0; }
+                else if (poiDate.dist >= 70 && poiDate.dist < 80)
+                { poiDate.speed = 75; lowSpeedCor = 1; }
+                else if (poiDate.dist >= 50 && poiDate.dist < 60)
+                { poiDate.speed = 50; lowSpeedCor = 3; }
+                else if (poiDate.dist >= 10 && poiDate.dist < 40)
+                { poiDate.speed = 30; lowSpeedCor = 5; }
+            }
+        }
+        private void pitchMoves(Point obj, ref string command)
+        {
+            if ((obj.X > 120 && obj.X < viewPort.Width - 120 &&
+                obj.Y < viewPort.Height - 60))
+            {
+                if (obj.Y > scCenter.Y + cor_pitch)
                 {
-                    command = "yaw-right ";
-                    putCmd(com_esRight, 3);
+                    command += "down ";
+                    putOrUpdateCmd(com_up, 5);
                 }
-                else if (obj.X < scCenter.X - cor_yaw && obj.X > scCenter.X - cor_roll)
+                else if (obj.Y < scCenter.Y - cor_pitch)
                 {
-                    command = "yaw-left ";
-                    putCmd(com_esLeft, 3);
+                    command += "up ";
+                    putOrUpdateCmd(com_down, 5 + lowSpeedCor);
                 }
             }
-
-            //roll correction
+        }
+        private void rollMoves(Point obj, ref string command)
+        {
             if (obj.X > scCenter.X + cor_roll ||
                (obj.X > scCenter.X && obj.Y > viewPort.Height - 60))
             {
@@ -147,43 +180,22 @@ namespace botiloid.gameBot
                 command += "left" + moveTime + " ";
                 putCmd(com_left, moveTime);
             }
-
-            //pitch correction
-            if ((obj.X > 120 && obj.X < viewPort.Width - 120 &&
-                obj.Y < viewPort.Height - 60))
+        }
+        private void yawMoves(Point obj, ref string command)
+        {
+            if (lowSpeedCor == 5)
             {
-                if (obj.Y > scCenter.Y + cor_pitch)
+                if (obj.X > scCenter.X + cor_yaw && obj.X < scCenter.X + cor_roll)
                 {
-                    command += "down ";
-                    putOrUpdateCmd(com_up, 5);
+                    command = "yaw-right ";
+                    putCmd(com_esRight, 3);
                 }
-                else if (obj.Y < scCenter.Y - cor_pitch)
+                else if (obj.X < scCenter.X - cor_yaw && obj.X > scCenter.X - cor_roll)
                 {
-                    command += "up ";
-                    putOrUpdateCmd(com_down, 5 + lowSpeedCor);
+                    command = "yaw-left ";
+                    putCmd(com_esLeft, 3);
                 }
             }
-
-            //speed correction
-            if (obj.X < 10 || obj.X > viewPort.Width - 10 ||
-                obj.Y < 10 || obj.Y > viewPort.Height - 10)
-            { poiDate.speed = 100; lowSpeedCor = 0; }
-            else
-            {
-                if (poiDate.dist >= 90)
-                { poiDate.speed = 100; lowSpeedCor = 0; }
-                else if (poiDate.dist >= 70 && poiDate.dist < 80)
-                { poiDate.speed = 75; lowSpeedCor = 1; }
-                else if (poiDate.dist >= 50 && poiDate.dist < 60)
-                { poiDate.speed = 50; lowSpeedCor = 3; }
-                else if (poiDate.dist >= 10 && poiDate.dist < 40)
-                { poiDate.speed = 30; lowSpeedCor = 5; }
-            }
-
-            if (command == string.Empty)
-                command = "streight";
-
-            return command;
         }
 
         /// <summary>

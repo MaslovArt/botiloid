@@ -18,7 +18,7 @@ namespace botiloid
         private NetManager.NMClient nmClient;
         private SimplePlaneControler spc;
         private int com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_run, com_pause, com_fire;
-        private bool isVisible = true, wasRecoding = false;
+        private bool wasRecoding = false;
 
         public MainForm()
         {
@@ -89,11 +89,7 @@ namespace botiloid
             hook = new Hotkey();
             hook.registerHotkey(Modifier.Ctrl, Keys.B, (e)=> 
             {
-                if (isVisible)
-                    Left += Width;
-                else
-                    Left -= Width;
-                isVisible = !isVisible;
+                Visible = !Visible;
             });
             var dtn = DateTime.Now;
             hook.registerHotkey(Modifier.Ctrl, Keys.S, (e) =>
@@ -118,15 +114,15 @@ namespace botiloid
         {
             spc = new SimplePlaneControler();
             GlobalVarialbles gv = GlobalVarialbles.Constructor();
-            com_up = Convert.ToInt32(gv.serverCmds["up"]);
-            com_down = Convert.ToInt32(gv.serverCmds["down"]);
-            com_right = Convert.ToInt32(gv.serverCmds["right"]);
-            com_left = Convert.ToInt32(gv.serverCmds["left"]);
-            com_esLeft = Convert.ToInt32(gv.serverCmds["esLeft"]);
-            com_esRight = Convert.ToInt32(gv.serverCmds["esRight"]);
-            com_fire = Convert.ToInt32(gv.serverCmds["fire"]);
-            com_run = Convert.ToInt32(gv.serverCmds["run"]);
-            com_pause = Convert.ToInt32(gv.serverCmds["pause"]);
+            com_up = gv.serverCmds["up"];
+            com_down = gv.serverCmds["down"];
+            com_right = gv.serverCmds["right"];
+            com_left = gv.serverCmds["left"];
+            com_esLeft = gv.serverCmds["esLeft"];
+            com_esRight = gv.serverCmds["esRight"];
+            com_fire = gv.serverCmds["fire"];
+            com_run = gv.serverCmds["run"];
+            com_pause = gv.serverCmds["pause"];
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -140,29 +136,35 @@ namespace botiloid
         }
         private void подключениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            using (Connect dialog = new Connect())
+            if (nmClient == null || nmClient.Running == false)
             {
-                var result = dialog.ShowDialog();
-                if (result == DialogResult.OK)
+                using (Connect dialog = new Connect())
                 {
-                    nmClient = new NetManager.NMClient(this);
-                    nmClient.OnReseive += NmClient_OnReseive;
-                    nmClient.OnError += NmClient_OnError;
-                    nmClient.IPServer = IPAddress.Parse(dialog.HostName);
-                    nmClient.Port = dialog.Port;
-                    nmClient.Name = dialog.UserName;
-                    try
+                    var result = dialog.ShowDialog();
+                    if (result == DialogResult.OK)
                     {
+                        nmClient = new NetManager.NMClient(this);
+                        nmClient.OnReseive += NmClient_OnReseive;
+                        nmClient.OnError += NmClient_OnError;
+                        nmClient.IPServer = IPAddress.Parse(dialog.HostName);
+                        nmClient.Port = dialog.Port;
+                        nmClient.Name = dialog.UserName;
                         nmClient.RunClient();
+
+                        iC_ConnectStatus.Status = 1;
+                        logLabel1.Text = (iC_ConnectStatus.StateTitle);
+                        initServCmds();
+
+                        подключениеToolStripMenuItem.Text = "Отключится";
                     }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Произошла ошибка при подключении: {0}", ex.Message);
-                    }
-                    iC_ConnectStatus.Status = 2;
-                    logLabel1.Text = (iC_ConnectStatus.StateTitle);
-                    initServCmds();
                 }
+            }
+            else
+            {
+                nmClient.StopClient();
+                iC_ConnectStatus.Status = 0;
+                logLabel1.Text = (iC_ConnectStatus.StateTitle);
+                подключениеToolStripMenuItem.Text = "Подключиться";
             }
         }
         private void информацияПодключенияToolStripMenuItem_Click(object sender, EventArgs e)
@@ -196,19 +198,79 @@ namespace botiloid
         private void NmClient_OnError(object sender, NetManager.EventMsgArgs e)
         {
             MessageBox.Show("Ошибка сервера: " + e.Msg);
+
+            iC_ConnectStatus.Status = 0;
+            logLabel1.Text = (iC_ConnectStatus.StateTitle);
+            подключениеToolStripMenuItem.Text = "Отключится";
         }
         private void NmClient_OnReseive(object sender, NetManager.EventClientMsgArgs e)
         {
             int command = BitConverter.ToInt32(e.Msg, 0);
+
             if (command == com_up) { }
-            else if (command == com_down) { spc.Down(); }
-            else if (command == com_right) { spc.Right(); }
-            else if (command == com_left) { spc.Left(); }
-            else if (command == com_esLeft) { spc.EaseRight(); }
-            else if (command == com_esRight) { spc.EaseLeft(); }
-            else if (command == com_run) { gameBot.RunAsync(); }
-            else if (command == com_pause) { gameBot.Stop(); }
-            else if (command == com_fire) { spc.Fire(); }
+            else if (command == com_down)
+            {
+                labelServCmd.Text = "Server last cmd: down";
+                spc.Down();
+            }
+            else if (command == com_right)
+            {
+                labelServCmd.Text = "Server last cmd: right";
+                spc.Right();
+            }
+            else if (command == com_left)
+            {
+                labelServCmd.Text = "Server last cmd: left";
+                spc.Left();
+            }
+            else if (command == com_esLeft)
+            {
+                labelServCmd.Text = "Server last cmd: esLeft";
+                spc.EaseRight();
+            }
+            else if (command == com_esRight)
+            {
+                labelServCmd.Text = "Server last cmd: esRight";
+                spc.EaseLeft();
+            }
+            else if (command == com_run)
+            {
+                labelServCmd.Text = "Server last cmd: bot run";
+                gameBot.RunAsync();
+            }
+            else if (command == com_pause)
+            {
+                labelServCmd.Text = "Server last cmd: bot pause";
+                gameBot.Stop();
+            }
+            else if (command == com_fire)
+            {
+                spc.Fire();
+            }
         }
+
+        #region Form moving
+        private bool dragging = false;
+        private Point StartPoint = new Point(0, 0);
+        private void panelUp_MouseDown(object sender, MouseEventArgs e)
+        {
+            dragging = true;
+            this.Cursor = Cursors.NoMove2D;
+            StartPoint = new Point(e.X, e.Y);
+        }
+        private void panelUp_MouseUp(object sender, MouseEventArgs e)
+        {
+            dragging = false;
+            this.Cursor = Cursors.Default;
+        }
+        private void panelUp_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (dragging)
+            {
+                Point p = PointToScreen(e.Location);
+                Location = new Point(p.X - StartPoint.X, p.Y - StartPoint.Y);
+            }
+        }
+        #endregion
     }
 }

@@ -48,6 +48,7 @@
             this.buttonConnect.TabIndex = 10;
             this.buttonConnect.Text = "Подключиться";
             this.buttonConnect.UseVisualStyleBackColor = true;
+            this.buttonConnect.Click += new System.EventHandler(this.buttonConnect_Click);
             // 
             // NetGroup
             // 
