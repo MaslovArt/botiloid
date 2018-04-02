@@ -55,7 +55,8 @@ namespace botiloid.Subsidiary
             botKeys.Add("left", Keys.A);
             botKeys.Add("right", Keys.D);
             botKeys.Add("esLeft", Keys.Z);
-            botKeys.Add("esRight", Keys.X);
+            botKeys.Add("esRight", Keys.C);
+            botKeys.Add("fire", Keys.X);
         }
         private void initServerCmds()
         {
@@ -74,7 +75,7 @@ namespace botiloid.Subsidiary
         {
             learning = new Dictionary<string, string>();
             learning.Add("times", "5");
-            learning.Add("template", "[{0} {1},{2}] ");
+            learning.Add("template", "{0}{1}\t{2}\t{3}\t{4}\t{5}\t{6}");
             learning.Add("path", "learning");
         }
 
