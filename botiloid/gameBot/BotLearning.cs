@@ -67,7 +67,10 @@ namespace botiloid.gameBot
         private void Gkl_KeyDown(object sender, KeyEventArgs e)
         {
             if ((int)e.KeyCode < 58)
+            {
                 speed = e.KeyCode.ToString();
+                return;
+            }
             if ((byte)e.KeyCode == com_fire)
             {
                 isFire = true;
