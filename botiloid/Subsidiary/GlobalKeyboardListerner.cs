@@ -117,7 +117,7 @@ namespace botiloid.Subsidiary
             if (code >= 0)
             {
                 Keys key = (Keys)lParam.vkCode;
-                if ((int)key > 64 && (int)key < 91|| (int)key > 47 && (int)key < 58)
+                if ((int)key > 64 && (int)key < 91 || (int)key > 47 && (int)key < 58)
                 {
                     KeyEventArgs kea = new KeyEventArgs(key);
                     if ((wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN) && (KeyDown != null))

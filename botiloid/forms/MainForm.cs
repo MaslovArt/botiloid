@@ -16,6 +16,7 @@ namespace botiloid
         private SimplePlaneControler spc;
         private int com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_run, com_pause, com_fire;
         private bool wasRecoding = false;
+        private Hotkey hook;
 
         public MainForm()
         {
@@ -81,10 +82,9 @@ namespace botiloid
                 }));
             };
         }
-        int temp = 0;
         private void initKeyboardHook()
         {
-            Hotkey hook = new Hotkey();
+            hook = new Hotkey();
             hook.registerHotkey(Modifier.Ctrl, Keys.B, (e)=> 
             {
                 Visible = !Visible;
