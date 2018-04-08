@@ -81,6 +81,7 @@ namespace botiloid
                 }));
             };
         }
+        int temp = 0;
         private void initKeyboardHook()
         {
             Hotkey hook = new Hotkey();

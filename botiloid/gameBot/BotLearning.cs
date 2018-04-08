@@ -21,7 +21,7 @@ namespace botiloid.gameBot
         private string template;
         private string extention = ".txt";
 
-        private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_fire;
+        private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_fire, com_flaps_next, com_flaps_prev;
         private string speed = "D0";
         private int flaps = 1;
         private int dist = -1;
@@ -50,7 +50,8 @@ namespace botiloid.gameBot
             com_right = (byte)gv.botKeys["right"];
             com_esRight = (byte)gv.botKeys["esRight"];
             com_esLeft = (byte)gv.botKeys["esLeft"];
-
+            com_flaps_next = (byte)gv.botKeys["flaps-next"];
+            com_flaps_prev = (byte)gv.botKeys["flaps-prev"];
 
             this.bc = bc;
         }
@@ -66,6 +67,18 @@ namespace botiloid.gameBot
         }
         private void Gkl_KeyDown(object sender, KeyEventArgs e)
         {
+            if((int)e.KeyCode == com_flaps_next)
+            {
+                if (flaps < 4)
+                    flaps++;
+                return;
+            }
+            if ((int)e.KeyCode == com_flaps_prev)
+            {
+                if (flaps > 1)
+                    flaps--;
+                return;
+            }
             if ((int)e.KeyCode < 58)
             {
                 speed = e.KeyCode.ToString();
@@ -96,11 +109,12 @@ namespace botiloid.gameBot
             var fs = File.Create(filePath + "/" +
                                  DateTime.Now.ToShortDateString() +
                                  "-" + DateTime.Now.Hour + "_" +
-                                 DateTime.Now.Minute + extention);
+                                 DateTime.Now.Minute + "_" +
+                                 DateTime.Now.Second +
+                                 extention);
             StreamWriter sw = new StreamWriter(fs);
             sw.WriteLine("Game ViewPort=[" + bc.ViewPort + "];");
             sw.WriteLine("Up Down Left Right EsLeft EsRight Speed Flaps Fire Coor.X Coor.Y Distance");
-            //var iteration = 0;
             var cmdsBuffer = "";
             Task.Run(()=>
             {
@@ -108,7 +122,6 @@ namespace botiloid.gameBot
                 {
                     if (token.IsCancellationRequested)
                     {
-                        //sw.Write(cmdsBuffer);
                         sw.Close();
                         fs.Close();
                         isRecording = false;
@@ -118,7 +131,6 @@ namespace botiloid.gameBot
                     var poidata = bc.detectObj();
                     Point pt = poidata == null ? new Point(-1, -1) : poidata.pt;
                     dist = poidata.dist;
-                    //template = "{0}{1}\t{2}\t{3}\t{4}\t{5}\t{6}";
                     cmdsBuffer = String.Format(template, getPressedKeys(),
                                                           speed[1],
                                                           flaps,
@@ -126,12 +138,6 @@ namespace botiloid.gameBot
                                                           pt.X, pt.Y,
                                                           dist);
                     sw.WriteLine(cmdsBuffer);
-                    //if (++iteration > 1000)
-                    //{
-                    //    sw.Write(cmdsBuffer);
-                    //    cmdsBuffer = "";
-                    //    iteration = 0;
-                    //}
                     Thread.Sleep(delay);
                 }
                 isRecording = false;
@@ -145,24 +151,13 @@ namespace botiloid.gameBot
         private string getPressedKeys()
         {
             var res = "";
-            if (pressedKeys.Contains((Keys)com_up))
-                res += "1\t";
-            else res += "0\t";
-            if (pressedKeys.Contains((Keys)com_down))
-                res += "1\t";
-            else res += "0\t";
-            if (pressedKeys.Contains((Keys)com_left))
-                res += "1\t";
-            else res += "0\t";
-            if (pressedKeys.Contains((Keys)com_right))
-                res += "1\t";
-            else res += "0\t";
-            if (pressedKeys.Contains((Keys)com_esLeft))
-                res += "1\t";
-            else res += "0\t";
-            if (pressedKeys.Contains((Keys)com_esRight))
-                res += "1\t";
-            else res += "0\t";
+
+            res += pressedKeys.Contains((Keys)com_up) ? "1\t" : "0\t";
+            res += pressedKeys.Contains((Keys)com_down) ? "1\t" : "0\t";
+            res += pressedKeys.Contains((Keys)com_left) ? "1\t" : "0\t";
+            res += pressedKeys.Contains((Keys)com_right) ? "1\t" : "0\t";
+            res += pressedKeys.Contains((Keys)com_esLeft) ? "1\t" : "0\t";
+            res += pressedKeys.Contains((Keys)com_esRight) ? "1\t" : "0\t";
 
             return res;
         }
