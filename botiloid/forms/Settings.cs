@@ -48,7 +48,7 @@ namespace botiloid
         private void Settings_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (tabControl.TabPages[0] == tabControl.SelectedTab)
-                if (!(e.KeyChar > 47 && e.KeyChar < 57))
+                if (!(e.KeyChar >= 49 && e.KeyChar <= 57))
                     e.Handled = true;
         }
 
