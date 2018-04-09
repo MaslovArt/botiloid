@@ -108,8 +108,8 @@ namespace botiloid.gameBot
             isRecording = true;
             var fs = File.Create(filePath + "/" +
                                  DateTime.Now.ToShortDateString() +
-                                 "-" + DateTime.Now.Hour + "_" +
-                                 DateTime.Now.Minute + "_" +
+                                 "_" + DateTime.Now.Hour + "-" +
+                                 DateTime.Now.Minute + "-" +
                                  DateTime.Now.Second +
                                  extention);
             StreamWriter sw = new StreamWriter(fs);
@@ -132,7 +132,7 @@ namespace botiloid.gameBot
                     Point pt = poidata == null ? new Point(-1, -1) : poidata.pt;
                     dist = poidata.dist;
                     cmdsBuffer = String.Format(template, getPressedKeys(),
-                                                          speed[1],
+                                                          speed[1] == '0' ? "100" : speed[1] + "0",
                                                           flaps,
                                                           isFire ? "1" : "0",
                                                           pt.X, pt.Y,
