@@ -13,6 +13,7 @@ namespace botiloid
         private GameBot gameBot;
         private string pattern = @"il2.*";
         private NetManager.NMClient nmClient;
+        private bool listenServer = false;
         private SimplePlaneControler spc;
         private int com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_run, com_pause, com_fire;
         private bool wasRecoding = false;
@@ -126,15 +127,23 @@ namespace botiloid
             com_pause = gv.serverCmds["pause"];
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void запускToolStripMenuItem_Click(object sender, EventArgs e)
         {
             gameBot.initBotAsync(pattern);
         }
+        private void ToolStripModes_Click(object sender, EventArgs e)
+        {
+            ToolStripModeDefault.Checked = false;
+            ToolStripModeLearning.Checked = false;
+            var tsmi = sender as ToolStripMenuItem;
+            tsmi.Checked = true;
+            logLabel1.Text = ("Режим: " + tsmi.Text);
+            if ((string)tsmi.Tag == "1")
+                gameBot.BMode = GameBot.Mode.Default;
+            else
+                gameBot.BMode = GameBot.Mode.Learning;
+        }
+
         private void подключениеToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (nmClient == null || nmClient.Running == false)
@@ -178,23 +187,16 @@ namespace botiloid
                                               nmClient.Port,
                                               nmClient.Name));
         }
-        private void ToolStripSettings_Click(object sender, EventArgs e)
+        private void начатьПриемToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var sets = new Settings();
-            sets.ShowDialog();
-        }
-
-        private void ToolStripModes_Click(object sender, EventArgs e)
-        {
-            ToolStripModeDefault.Checked = false;
-            ToolStripModeLearning.Checked = false;
-            var tsmi = sender as ToolStripMenuItem;
-            tsmi.Checked = true;
-            logLabel1.Text = ("Режим: " + tsmi.Text);
-            if ((string)tsmi.Tag == "1")
-                gameBot.BMode = GameBot.Mode.Default;
-            else
-                gameBot.BMode = GameBot.Mode.Learning;
+            if (nmClient == null || nmClient.Running == false)
+            {
+                MessageBox.Show("Подключение отсутствует!");
+                return;
+            }
+            listenServer = !listenServer;
+            logLabel1.Text = listenServer ? "Слушаю сервер" : "Не слушаю сервер";
+            начатьПриемToolStripMenuItem.Text = listenServer ? "Остановить прием" : "Начать прием";
         }
 
         private void NmClient_OnError(object sender, NetManager.EventMsgArgs e)
@@ -207,50 +209,65 @@ namespace botiloid
         }
         private void NmClient_OnReseive(object sender, NetManager.EventClientMsgArgs e)
         {
-            int command = BitConverter.ToInt32(e.Msg, 0);
+            if (listenServer)
+            {
+                int command = BitConverter.ToInt32(e.Msg, 0);
 
-            if (command == com_up) { }
-            else if (command == com_down)
-            {
-                labelServCmd.Text = "Server last cmd: down";
-                spc.Down();
-            }
-            else if (command == com_right)
-            {
-                labelServCmd.Text = "Server last cmd: right";
-                spc.Right();
-            }
-            else if (command == com_left)
-            {
-                labelServCmd.Text = "Server last cmd: left";
-                spc.Left();
-            }
-            else if (command == com_esLeft)
-            {
-                labelServCmd.Text = "Server last cmd: esLeft";
-                spc.EaseRight();
-            }
-            else if (command == com_esRight)
-            {
-                labelServCmd.Text = "Server last cmd: esRight";
-                spc.EaseLeft();
-            }
-            else if (command == com_run)
-            {
-                labelServCmd.Text = "Server last cmd: bot run";
-                gameBot.RunAsync();
-            }
-            else if (command == com_pause)
-            {
-                labelServCmd.Text = "Server last cmd: bot pause";
-                gameBot.Stop();
-            }
-            else if (command == com_fire)
-            {
-                spc.Fire();
+                if (command == com_up) { }
+                else if (command == com_down)
+                {
+                    labelServCmd.Text = "Server last cmd: down";
+                    spc.Down();
+                }
+                else if (command == com_right)
+                {
+                    labelServCmd.Text = "Server last cmd: right";
+                    spc.Right();
+                }
+                else if (command == com_left)
+                {
+                    labelServCmd.Text = "Server last cmd: left";
+                    spc.Left();
+                }
+                else if (command == com_esLeft)
+                {
+                    labelServCmd.Text = "Server last cmd: esLeft";
+                    spc.EaseRight();
+                }
+                else if (command == com_esRight)
+                {
+                    labelServCmd.Text = "Server last cmd: esRight";
+                    spc.EaseLeft();
+                }
+                else if (command == com_run)
+                {
+                    labelServCmd.Text = "Server last cmd: bot run";
+                    gameBot.RunAsync();
+                }
+                else if (command == com_pause)
+                {
+                    labelServCmd.Text = "Server last cmd: bot pause";
+                    gameBot.Stop();
+                }
+                else if (command == com_fire)
+                {
+                    labelServCmd.Text = "Server last cmd: fire";
+                    spc.Fire();
+                }
             }
         }
 
+        private void ToolStripSettings_Click(object sender, EventArgs e)
+        {
+            var sets = new Settings();
+            sets.ShowDialog();
+        }
+
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
         #region Form moving
         private bool dragging = false;
         private Point StartPoint = new Point(0, 0);

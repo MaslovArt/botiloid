@@ -31,6 +31,7 @@
             this.labelClose = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.labelServCmd = new System.Windows.Forms.Label();
+            this.labelfps = new System.Windows.Forms.Label();
             this.labelSpeed = new System.Windows.Forms.Label();
             this.labelCommand = new System.Windows.Forms.Label();
             this.labelDist = new System.Windows.Forms.Label();
@@ -40,7 +41,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.labelfps = new System.Windows.Forms.Label();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.ботToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripStart = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +54,7 @@
             this.logLabel1 = new botiloid.CustomControls.LogLabel();
             this.iC_ConnectStatus = new botiloid.IndicatorControl();
             this.iC_BotStatus = new botiloid.IndicatorControl();
+            this.начатьПриемToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -101,6 +102,17 @@
             this.labelServCmd.Size = new System.Drawing.Size(14, 20);
             this.labelServCmd.TabIndex = 17;
             this.labelServCmd.Text = "-";
+            // 
+            // labelfps
+            // 
+            this.labelfps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labelfps.AutoSize = true;
+            this.labelfps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelfps.Location = new System.Drawing.Point(209, 37);
+            this.labelfps.Name = "labelfps";
+            this.labelfps.Size = new System.Drawing.Size(31, 20);
+            this.labelfps.TabIndex = 18;
+            this.labelfps.Text = "fps";
             // 
             // labelSpeed
             // 
@@ -204,17 +216,6 @@
             this.label3.TabIndex = 15;
             this.label3.Text = "Ctrl + B";
             // 
-            // labelfps
-            // 
-            this.labelfps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelfps.AutoSize = true;
-            this.labelfps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelfps.Location = new System.Drawing.Point(209, 37);
-            this.labelfps.Name = "labelfps";
-            this.labelfps.Size = new System.Drawing.Size(31, 20);
-            this.labelfps.TabIndex = 18;
-            this.labelfps.Text = "fps";
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -225,7 +226,7 @@
             this.настройкиToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(318, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(318, 32);
             this.menuStrip1.TabIndex = 17;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -235,7 +236,7 @@
             this.ToolStripStart,
             this.ToolStripModes});
             this.ботToolStripMenuItem.Name = "ботToolStripMenuItem";
-            this.ботToolStripMenuItem.Size = new System.Drawing.Size(50, 24);
+            this.ботToolStripMenuItem.Size = new System.Drawing.Size(50, 28);
             this.ботToolStripMenuItem.Text = "Бот";
             // 
             // ToolStripStart
@@ -276,9 +277,10 @@
             // 
             this.серверToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.подключениеToolStripMenuItem,
-            this.информацияПодключенияToolStripMenuItem});
+            this.информацияПодключенияToolStripMenuItem,
+            this.начатьПриемToolStripMenuItem});
             this.серверToolStripMenuItem.Name = "серверToolStripMenuItem";
-            this.серверToolStripMenuItem.Size = new System.Drawing.Size(77, 24);
+            this.серверToolStripMenuItem.Size = new System.Drawing.Size(77, 28);
             this.серверToolStripMenuItem.Text = "Сервер";
             // 
             // подключениеToolStripMenuItem
@@ -298,7 +300,7 @@
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(103, 24);
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(103, 28);
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.ToolStripSettings_Click);
             // 
@@ -335,6 +337,13 @@
             this.iC_BotStatus.Status = 0;
             this.iC_BotStatus.TabIndex = 8;
             this.iC_BotStatus.TabStop = false;
+            // 
+            // начатьПриемToolStripMenuItem
+            // 
+            this.начатьПриемToolStripMenuItem.Name = "начатьПриемToolStripMenuItem";
+            this.начатьПриемToolStripMenuItem.Size = new System.Drawing.Size(298, 30);
+            this.начатьПриемToolStripMenuItem.Text = "Начать прием";
+            this.начатьПриемToolStripMenuItem.Click += new System.EventHandler(this.начатьПриемToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -395,6 +404,7 @@
         private System.Windows.Forms.Label labelfps;
         private System.Windows.Forms.Label labelSpeed;
         private System.Windows.Forms.Label labelServCmd;
+        private System.Windows.Forms.ToolStripMenuItem начатьПриемToolStripMenuItem;
     }
 }
 
