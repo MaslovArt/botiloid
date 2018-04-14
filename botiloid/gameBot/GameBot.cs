@@ -138,7 +138,7 @@ namespace botiloid.gameBot
                 cv = new BotCV(WinDescriptor, 118, 140, 140, 120, 255, 255);
 
             cts = new CancellationTokenSource();
-            var token = cts.Token;
+            CancellationToken token = cts.Token;
             switch(_mode)
             {
                 case Mode.Default: botWork(token); break;
@@ -154,8 +154,10 @@ namespace botiloid.gameBot
         {
             if (cts != null)
                 cts.Cancel();
+            if (bl != null)
+                bl.StopRecord();
 
-            Status = State.Ready; //3
+            Status = State.Ready;
         }
 
         /// <summary>
@@ -183,7 +185,6 @@ namespace botiloid.gameBot
                 POIData defPOI = new POIData(new Point(-1, -1), "-");
                 while (true)
                 {
-
                     sw.Restart();
                     if (token.IsCancellationRequested)
                     {
@@ -214,7 +215,7 @@ namespace botiloid.gameBot
             if (bl == null)
                 bl = new BotLearning(cv);
 
-            bl.StartRecordAsync(token);        
+            bl.StartRecordAsync();        
         }
 
         /// <summary>

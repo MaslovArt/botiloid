@@ -15,6 +15,7 @@ namespace botiloid.gameBot
         private List<Keys> pressedKeys;
         private BotCV bc;
         private bool isRecording = false;
+        private CancellationTokenSource cts;
 
         private string filePath;
         private int delay;
@@ -100,33 +101,33 @@ namespace botiloid.gameBot
         /// Запускает запись команд
         /// </summary>
         /// <param name="token">Источник признака отмены</param>
-        public void StartRecordAsync(CancellationToken token)
+        public void StartRecordAsync()
         {
             if (isRecording)
+            {
+                System.Media.SystemSounds.Hand.Play();
                 return;
-
-            isRecording = true;
-            var fs = File.Create(filePath + "/" +
-                                 DateTime.Now.ToShortDateString() +
-                                 "_" + DateTime.Now.Hour + "-" +
-                                 DateTime.Now.Minute + "-" +
-                                 DateTime.Now.Second +
-                                 extention);
-            StreamWriter sw = new StreamWriter(fs);
-            sw.WriteLine("Game ViewPort=[" + bc.ViewPort + "];");
-            sw.WriteLine("Up Down Left Right EsLeft EsRight Speed Flaps Fire Coor.X Coor.Y Distance");
-            var cmdsBuffer = "";
+            }
+            cts = new CancellationTokenSource();
+            var token = cts.Token;
             Task.Run(()=>
             {
-                while(true)
+                isRecording = true;
+                System.Media.SystemSounds.Beep.Play();
+                var fs = File.Create(filePath + "/" +
+                                     DateTime.Now.ToShortDateString() +
+                                     "_" + DateTime.Now.Hour + "-" +
+                                     DateTime.Now.Minute + "-" +
+                                     DateTime.Now.Second +
+                                     extention);
+                StreamWriter sw = new StreamWriter(fs);
+                sw.WriteLine("Game ViewPort=[" + bc.ViewPort + "];");
+                sw.WriteLine("Up Down Left Right EsLeft EsRight Speed Flaps Fire Coor.X Coor.Y Distance");
+                var cmdsBuffer = "";
+                while (true)
                 {
                     if (token.IsCancellationRequested)
-                    {
-                        sw.Close();
-                        fs.Close();
-                        isRecording = false;
                         break;
-                    }
 
                     var poidata = bc.detectObj();
                     Point pt = poidata == null ? new Point(-1, -1) : poidata.pt;
@@ -140,8 +141,16 @@ namespace botiloid.gameBot
                     sw.WriteLine(cmdsBuffer);
                     Thread.Sleep(delay);
                 }
+                sw.Close();
+                fs.Close();
                 isRecording = false;
+                System.Media.SystemSounds.Beep.Play();
             }, token);
+        }
+
+        public void StopRecord() {
+            if (cts != null)
+                cts.Cancel();
         }
         
         /// <summary>

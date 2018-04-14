@@ -18,6 +18,7 @@ namespace botiloid
         private int com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_run, com_pause, com_fire;
         private bool wasRecoding = false;
         private Hotkey hook;
+        private int hotkeyDelay = 1;
 
         public MainForm()
         {
@@ -93,7 +94,7 @@ namespace botiloid
             var dtn = DateTime.Now;
             hook.registerHotkey(Modifier.Ctrl, Keys.S, (e) =>
             {
-                if ((DateTime.Now - dtn).Seconds < 1)
+                if ((DateTime.Now - dtn).Seconds < hotkeyDelay)
                     return;
                 dtn = DateTime.Now;
 
@@ -139,9 +140,14 @@ namespace botiloid
             tsmi.Checked = true;
             logLabel1.Text = ("Режим: " + tsmi.Text);
             if ((string)tsmi.Tag == "1")
+            {
                 gameBot.BMode = GameBot.Mode.Default;
-            else
+                hotkeyDelay = 1;
+            }
+            else {
                 gameBot.BMode = GameBot.Mode.Learning;
+                hotkeyDelay = 4;
+            }
         }
 
         private void подключениеToolStripMenuItem_Click(object sender, EventArgs e)
