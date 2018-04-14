@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Timers;
+using System.Windows.Forms;
 
 namespace botiloid.gameBot
 {
@@ -44,6 +45,7 @@ namespace botiloid.gameBot
         private Size viewPort;
         private Point scCenter; 
         private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
+        private int currentSpeed = 100;
 
         private int lowSpeedCor = 0;
         private int cor_pitch = 100, cor_roll = 100, cor_yaw = 40;
@@ -52,8 +54,8 @@ namespace botiloid.gameBot
         private List<byte> curKeys = new List<byte>(3);
         private GlobalVarialbles gv = GlobalVarialbles.Constructor();
 
-        private Timer timer;
-        private List<keyPresser> currentCmds = new List<keyPresser>(3);
+        private System.Timers.Timer timer;
+        private static List<keyPresser> currentCmds = new List<keyPresser>(3);
 
         [DllImport("user32.dll")]
         public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint dwExtraInfo);
@@ -68,7 +70,7 @@ namespace botiloid.gameBot
 
             rollStep = viewPort.Width / 8;
             pitchStep = viewPort.Height / 5;
-            timer = new Timer(70);
+            timer = new System.Timers.Timer(60);
             timer.Elapsed += Timer_Elapsed;
             timer.Enabled = true;
         }
@@ -78,10 +80,13 @@ namespace botiloid.gameBot
         /// </summary>
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            foreach (var cmd in currentCmds)
-                if(--cmd.times < 1)
-                    if (currentCmds.Remove(cmd))
+            lock(currentCmds)
+            {
+                foreach (var cmd in currentCmds)
+                    if (--cmd.times == 0)
                         keybd_event(cmd.code, 0, KEYEVENTF_KEYUP, 0);
+            }
+            currentCmds.RemoveAll(o => o.times == 0);
         }
 
         /// <summary>
@@ -134,13 +139,34 @@ namespace botiloid.gameBot
             else
             {
                 if (poiDate.dist >= 90)
-                { poiDate.speed = 100; lowSpeedCor = 0; }
+                {
+                    poiDate.speed = 100;
+                    lowSpeedCor = 0;
+                    if (currentSpeed != 100)
+                        simpleKeyPress((byte)Keys.D0);
+                }
                 else if (poiDate.dist >= 70 && poiDate.dist < 80)
-                { poiDate.speed = 75; lowSpeedCor = 1; }
+                {
+                    poiDate.speed = 70;
+                    lowSpeedCor = 1;
+                    if (currentSpeed != 70)
+                        simpleKeyPress((byte)Keys.D7);
+                }
                 else if (poiDate.dist >= 50 && poiDate.dist < 60)
-                { poiDate.speed = 50; lowSpeedCor = 3; }
+                {
+                    poiDate.speed = 50;
+                    lowSpeedCor = 4;
+                    if (currentSpeed != 50)
+                        simpleKeyPress((byte)Keys.D5);
+                }
                 else if (poiDate.dist >= 10 && poiDate.dist < 40)
-                { poiDate.speed = 30; lowSpeedCor = 5; }
+                {
+                    poiDate.speed = 30;
+                    lowSpeedCor = 6;
+                    if (currentSpeed != 30)
+                        simpleKeyPress((byte)Keys.D3);
+                }
+                currentSpeed = poiDate.speed;
             }
         }
         private void pitchMoves(Point obj, ref string command)
@@ -151,12 +177,12 @@ namespace botiloid.gameBot
                 if (obj.Y > scCenter.Y + cor_pitch)
                 {
                     command += "down ";
-                    putOrUpdateCmd(com_up, 5);
+                    putOrUpdateCmd(com_up, 6);
                 }
                 else if (obj.Y < scCenter.Y - cor_pitch)
                 {
                     command += "up ";
-                    putOrUpdateCmd(com_down, 5 + lowSpeedCor);
+                    putOrUpdateCmd(com_down, 6 + lowSpeedCor);
                 }
             }
         }
@@ -166,7 +192,7 @@ namespace botiloid.gameBot
                (obj.X > scCenter.X && obj.Y > viewPort.Height - 60))
             {
                 var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
-                               ? 3
+                               ? 2
                                : 1;
                 command += "right" + moveTime + " ";
                 putCmd(com_right, moveTime);
@@ -175,7 +201,7 @@ namespace botiloid.gameBot
                      (obj.X < scCenter.X && obj.Y > viewPort.Height - 60))
             {
                 var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
-                               ? 3
+                               ? 2
                                : 1;
                 command += "left" + moveTime + " ";
                 putCmd(com_left, moveTime);
@@ -225,6 +251,12 @@ namespace botiloid.gameBot
                     return;
                 }
             putCmd(code, moveTime);
+        }
+
+        private void simpleKeyPress(byte code)
+        {
+            keybd_event(code, 0, 0, 0);
+            keybd_event(code, 0, KEYEVENTF_KEYUP, 0);
         }
 
         /// <summary>
