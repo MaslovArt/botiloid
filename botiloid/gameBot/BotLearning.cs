@@ -13,6 +13,7 @@ namespace botiloid.gameBot
     {
         private globalKeyboardHook gkl = new globalKeyboardHook();
         private List<Keys> pressedKeys;
+        private List<string> learningData;
         private BotCV bc;
         private bool isRecording = false;
         private CancellationTokenSource cts;
@@ -101,56 +102,70 @@ namespace botiloid.gameBot
         /// Запускает запись команд
         /// </summary>
         /// <param name="token">Источник признака отмены</param>
-        public void StartRecordAsync()
+        public bool StartRecordAsync()
         {
             if (isRecording)
             {
                 System.Media.SystemSounds.Hand.Play();
-                return;
+                return false;
             }
             cts = new CancellationTokenSource();
             var token = cts.Token;
-            Task.Run(()=>
+            Task.Run(() =>
             {
                 isRecording = true;
                 System.Media.SystemSounds.Beep.Play();
-                var fs = File.Create(filePath + "/" +
-                                     DateTime.Now.ToShortDateString() +
-                                     "_" + DateTime.Now.Hour + "-" +
-                                     DateTime.Now.Minute + "-" +
-                                     DateTime.Now.Second +
-                                     extention);
-                StreamWriter sw = new StreamWriter(fs);
-                sw.WriteLine("Game ViewPort=[" + bc.ViewPort + "];");
-                sw.WriteLine("Up Down Left Right EsLeft EsRight Speed Flaps Fire Coor.X Coor.Y Distance");
                 var cmdsBuffer = "";
-                while (true)
+                learningData = new List<string>();
+                while (!token.IsCancellationRequested)
                 {
-                    if (token.IsCancellationRequested)
-                        break;
-
                     var poidata = bc.detectObj();
                     Point pt = poidata == null ? new Point(-1, -1) : poidata.pt;
                     dist = poidata.dist;
                     cmdsBuffer = String.Format(template, getPressedKeys(),
-                                                          speed[1] == '0' ? "100" : speed[1] + "0",
-                                                          flaps,
-                                                          isFire ? "1" : "0",
-                                                          pt.X, pt.Y,
-                                                          dist);
-                    sw.WriteLine(cmdsBuffer);
+                                                         speed[1] == '0' ? "100" : speed[1] + "0",
+                                                         flaps,
+                                                         isFire ? "1" : "0",
+                                                         pt.X, pt.Y,
+                                                         dist);
+                    learningData.Add(cmdsBuffer);
                     Thread.Sleep(delay);
                 }
-                sw.Close();
-                fs.Close();
+
+                saveLearningData();
+
                 isRecording = false;
                 System.Media.SystemSounds.Beep.Play();
             }, token);
+            return true;
         }
 
         public void StopRecord() {
             if (cts != null)
                 cts.Cancel();
+        }
+
+        private void saveLearningData()
+        {
+            if (learningData == null)
+                return;
+
+            using (var fs = File.Create(filePath + "/" +
+                                DateTime.Now.ToShortDateString() + "_" +
+                                DateTime.Now.Hour + "-" +
+                                DateTime.Now.Minute + "-" +
+                                DateTime.Now.Second +
+                                extention))
+            {
+                using (StreamWriter sw = new StreamWriter(fs))
+                {
+                    sw.WriteLine("Game ViewPort=[" + bc.ViewPort + "];");
+                    sw.WriteLine("Up Down Left Right EsLeft EsRight Speed Flaps Fire Coor.X Coor.Y Distance");
+                    foreach (var item in learningData)
+                        sw.WriteLine(item);
+                    learningData = null;
+                }
+            }
         }
         
         /// <summary>

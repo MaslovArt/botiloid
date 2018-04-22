@@ -14,15 +14,12 @@ namespace botiloid.gameBot
         public POIData(Point pt, string dist)
         {
             this.pt = pt;
-            try
-            {
+
+            if (dist.Length >= 2)
                 this.dist = Convert.ToInt32(dist);
-            }
-            catch (Exception)
-            {
+            else
                 this.dist = -1;
-            }
-            
+
         }
     }
 }

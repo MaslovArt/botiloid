@@ -270,5 +270,12 @@ namespace botiloid.gameBot
             foreach (var item in currentCmds)
                 keybd_event(item.code, 0, KEYEVENTF_KEYUP, 0);
         }
+
+
+        //TODO Управление закрылками
+        //TODO Предотвращение раскачивания
+        //TODO Позволять изменять скорость только при сближении 99-
+        //TODO Исправить излишнее изменение скорости
+        //TODO Добавить в класс keyPresser команду на продолжение
     }
 }

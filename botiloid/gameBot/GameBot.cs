@@ -98,11 +98,11 @@ namespace botiloid.gameBot
         /// <param name="winName">Паттер поиска процесса</param>
         public void initBotAsync(string winName)
         {
-            if ((int)status > 0)
+            if (status > State.NotInitialized)
                 return;
             Task.Run(() =>
             {
-                Status = State.Initialization; //2
+                Status = State.Initialization;
                 Regex rgx = new Regex(winName, RegexOptions.IgnoreCase);
                 while (true)
                 {
@@ -116,7 +116,7 @@ namespace botiloid.gameBot
                             gameProc.EnableRaisingEvents = true;
                             gameProc.Exited += GameProc_Exited;
                             NativeWin32.SetForegroundWindow(gameProc.MainWindowHandle.ToInt32());
-                            Status = State.Ready; //3
+                            Status = State.Ready;
                             return;
                         }
                     }
@@ -139,12 +139,14 @@ namespace botiloid.gameBot
 
             cts = new CancellationTokenSource();
             CancellationToken token = cts.Token;
+            bool startState = false;
             switch(_mode)
             {
-                case Mode.Default: botWork(token); break;
-                case Mode.Learning: botLearning(token); break;
+                case Mode.Default: startState = botWork(token); break;
+                case Mode.Learning: startState = botLearning(token); break;
             }
-            Status = State.Active; //4
+            if (startState)
+                Status = State.Active;
         }
 
         /// <summary>
@@ -167,7 +169,7 @@ namespace botiloid.gameBot
         /// <param name="e"></param>
         private void GameProc_Exited(object sender, EventArgs e)
         {
-            Status = State.NotInitialized; //1
+            Status = State.NotInitialized;
             if (cts != null)
                 cts.Cancel();
         }
@@ -176,7 +178,7 @@ namespace botiloid.gameBot
         /// Робота бота в Mode.Default
         /// </summary>
         /// <param name="token">Источник признака отмены</param>
-        private void botWork(CancellationToken token)
+        private bool botWork(CancellationToken token)
         {
             if (bc == null)
                 bc = new KeyboardTimerBotControl(cv.ViewPort);
@@ -204,18 +206,19 @@ namespace botiloid.gameBot
                         onDataReport(obj);
                 }
             }, token);
+            return true;
         }
 
         /// <summary>
         /// Работа бота в Mode.Learning (запись полета)
         /// </summary>
         /// <param name="token">Источник признака отмены</param>
-        private void botLearning(CancellationToken token)
+        private bool botLearning(CancellationToken token)
         {
             if (bl == null)
                 bl = new BotLearning(cv);
 
-            bl.StartRecordAsync();        
+            return bl.StartRecordAsync();        
         }
 
         /// <summary>

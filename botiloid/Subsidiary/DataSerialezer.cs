@@ -19,7 +19,15 @@ namespace botiloid
         /// <returns></returns>
         public static bool saveInfo<T>(T Info, string filename)
         {
-            FileStream fs = new FileStream(filename, FileMode.Create);
+            FileStream fs = null;
+            try {
+                fs = new FileStream(filename, FileMode.Create);
+            }
+            catch(DirectoryNotFoundException dnfe)
+            {
+                Console.WriteLine(dnfe.Message);
+                return false;
+            }
             BinaryFormatter formatter = new BinaryFormatter();
             try
             {
@@ -46,7 +54,13 @@ namespace botiloid
         {
             FileStream fs = null;
             storage = default(T);
-            fs = new FileStream(filename, FileMode.OpenOrCreate);
+            try {
+                fs = new FileStream(filename, FileMode.OpenOrCreate);
+            }
+            catch(DirectoryNotFoundException)
+            {
+                return false;
+            }
             try
             {
                 BinaryFormatter formatter = new BinaryFormatter();

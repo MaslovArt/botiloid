@@ -6,6 +6,7 @@ using Emgu.CV.Util;
 using Emgu.CV.OCR;
 using System.Drawing;
 using System;
+using Tesseract;
 
 namespace botiloid.gameBot
 {
@@ -30,7 +31,15 @@ namespace botiloid.gameBot
             sc = new ScreenCapture();
             winDiscript = win;
 
-            tess = new Tesseract(@"", "eng", OcrEngineMode.TesseractOnly);
+            try
+            {
+                tess = new Emgu.CV.OCR.Tesseract(@"", "eng", OcrEngineMode.TesseractOnly);
+            }
+            catch (Exception te)
+            {
+                Console.WriteLine(te.Message);
+                tess = null;
+            }
         }
 
         public Size ViewPort
@@ -87,24 +96,12 @@ namespace botiloid.gameBot
                 }
             }
             var rec = PointCollection.BoundingRectangle(pList.ToArray());
+
             if (rec.Width > 0)
             {
-                if (++distReqest > 25)
+                if (++distReqest > 20)
                 {
-                    Rectangle roi = new Rectangle(new Point(rec.Location.X - 1, rec.Location.Y - 3), new Size(27, 14));
-                    var imPart = processedFrameSt;
-                    imPart.ROI = roi;
-                    imPart = imPart.Copy();
-                    imPart = imPart.SmoothGaussian(1);
-                    filtDist = "";
-                    tess.SetImage(imPart);
-                    tess.Recognize();
-                    var t = tess.GetUTF8Text();
-                    for (int i = 0; i < t.Length; i++)
-                    {
-                        if ((int)t[i] > 47 && (int)t[i] < 58)
-                            filtDist += t[i];
-                    }
+                    filtDist = recognizeSpeed(rec, processedFrameSt);
                     if (filtDist.Length > 1)
                         distReqest = 0;
                 }
@@ -112,6 +109,32 @@ namespace botiloid.gameBot
                 return pd;
             }
             return null;
+        }
+
+        private string recognizeSpeed(Rectangle rec, Image<Gray, byte> processedFrameSt)
+        {
+            Rectangle roi = new Rectangle(new Point(rec.Location.X - 1, rec.Location.Y - 3), new Size(27, 14));
+            var imPart = processedFrameSt;
+            imPart.ROI = roi;
+            imPart = imPart.Copy();
+            imPart = imPart.SmoothGaussian(1);
+            filtDist = "";
+
+            if (tess != null)
+            {
+                tess.SetImage(imPart);
+                tess.Recognize();
+                var t = tess.GetUTF8Text();
+                for (int i = 0; i < t.Length; i++)
+                {
+                    if ((int)t[i] > 47 && (int)t[i] < 58)
+                        filtDist += t[i];
+                }
+            }
+            else {
+                filtDist = string.Empty;
+            }
+            return filtDist;
         }
     }
 }

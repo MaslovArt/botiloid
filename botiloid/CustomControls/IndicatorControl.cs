@@ -48,7 +48,7 @@ namespace botiloid
                 if (value < 0 || value == status)
                     return;
 
-                //System.Media.SystemSounds.Beep.Play();
+                System.Media.SystemSounds.Beep.Play();
                 status = value;
                 if (StatusChange != null)
                     StatusChange(this, status);
