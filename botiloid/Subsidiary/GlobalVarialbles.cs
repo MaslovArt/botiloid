@@ -72,6 +72,8 @@ namespace botiloid.Subsidiary
             serverCmds.Add("fire", 9);
             serverCmds.Add("run", 7);
             serverCmds.Add("pause", 8);
+            serverCmds.Add("rmove", 10);
+            serverCmds.Add("lmove", 11);
         }
         private void initLearning()
         {

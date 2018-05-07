@@ -6,7 +6,6 @@ using Emgu.CV.Util;
 using Emgu.CV.OCR;
 using System.Drawing;
 using System;
-using Tesseract;
 
 namespace botiloid.gameBot
 {
@@ -18,6 +17,7 @@ namespace botiloid.gameBot
         private IntPtr winDiscript;
         private int distReqest = 0;
         private string filtDist = "";
+        private string noFiltDist = "";
 
         public BotCV(IntPtr win, int Hmin, int Smin, int Vmin, int Hmax, int Smax, int Vmax)
         {
@@ -106,6 +106,7 @@ namespace botiloid.gameBot
                         distReqest = 0;
                 }
                 var pd = new POIData(rec.Location, filtDist);
+                pd.noFiltDist = noFiltDist;
                 return pd;
             }
             return null;
@@ -119,12 +120,12 @@ namespace botiloid.gameBot
             imPart = imPart.Copy();
             imPart = imPart.SmoothGaussian(1);
             filtDist = "";
-
             if (tess != null)
             {
                 tess.SetImage(imPart);
                 tess.Recognize();
                 var t = tess.GetUTF8Text();
+                noFiltDist = t;
                 for (int i = 0; i < t.Length; i++)
                 {
                     if ((int)t[i] > 47 && (int)t[i] < 58)

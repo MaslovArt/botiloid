@@ -15,7 +15,7 @@ namespace botiloid
         private NetManager.NMClient nmClient;
         private bool listenServer = false;
         private SimplePlaneControler spc;
-        private int com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_run, com_pause, com_fire;
+        private int com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_run, com_pause, com_fire, com_lMove, com_rMove;
         private bool wasRecoding = false;
         private Hotkey hook;
         private int hotkeyDelay = 1;
@@ -77,6 +77,7 @@ namespace botiloid
                 {
                     labelObjPoint.Text = "Obj: " + e.pt.ToString();
                     labelDist.Text = "Distance: " + e.dist.ToString();
+                    labelNoFiltDist.Text = e.noFiltDist;
                     labelCommand.Text = "Command: " + e.command;
                     labelfps.Text = "fps " + e.fps.ToString();
                     if (e.speed > 0)
@@ -126,6 +127,8 @@ namespace botiloid
             com_fire = gv.serverCmds["fire"];
             com_run = gv.serverCmds["run"];
             com_pause = gv.serverCmds["pause"];
+            com_lMove = gv.serverCmds["lmove"];
+            com_rMove = gv.serverCmds["rmove"];
         }
 
         private void запускToolStripMenuItem_Click(object sender, EventArgs e)
@@ -230,10 +233,20 @@ namespace botiloid
                     labelServCmd.Text = "Server last cmd: right";
                     spc.Right();
                 }
+                else if (command == com_rMove)
+                {
+                    labelServCmd.Text = "Server last cmd: right move";
+                    spc.RightMove();
+                }
                 else if (command == com_left)
                 {
                     labelServCmd.Text = "Server last cmd: left";
                     spc.Left();
+                }
+                else if (command == com_lMove)
+                {
+                    labelServCmd.Text = "Server last cmd: left move";
+                    spc.LeftMove();
                 }
                 else if (command == com_esLeft)
                 {

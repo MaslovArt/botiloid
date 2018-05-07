@@ -67,6 +67,11 @@ namespace botiloid.gameBot
         {
             PressKey(com_left);
         }
+        public void LeftMove()
+        {
+            PressKey(com_left);
+            PressKey(com_up);
+        }
         public void EaseLeft()
         {
             PressKey(com_esLeft);
@@ -78,6 +83,11 @@ namespace botiloid.gameBot
         public void Right()
         {
             PressKey(com_right);
+        }
+        public void RightMove()
+        {
+            PressKey(com_right);
+            PressKey(com_up);
         }
         public void Up()
         {

@@ -39,20 +39,28 @@
             this.gbServСontrol1 = new System.Windows.Forms.GroupBox();
             this.tbFire = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.textBox5 = new System.Windows.Forms.TextBox();
             this.tbServEsRight = new System.Windows.Forms.TextBox();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             this.tbServEsLeft = new System.Windows.Forms.TextBox();
             this.tbServRight = new System.Windows.Forms.TextBox();
             this.tbServLeft = new System.Windows.Forms.TextBox();
             this.tbServDown = new System.Windows.Forms.TextBox();
             this.tbServUp = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.label30 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label29 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.Game = new System.Windows.Forms.TabPage();
             this.gbGameСontrol1 = new System.Windows.Forms.GroupBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.tbGameEsRight = new System.Windows.Forms.TextBox();
@@ -82,10 +90,6 @@
             this.label22 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label27 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.label28 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.Server.SuspendLayout();
             this.gbServСontrol2.SuspendLayout();
@@ -108,7 +112,7 @@
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(393, 441);
+            this.tabControl.Size = new System.Drawing.Size(393, 503);
             this.tabControl.TabIndex = 0;
             // 
             // Server
@@ -118,7 +122,7 @@
             this.Server.Location = new System.Drawing.Point(4, 29);
             this.Server.Name = "Server";
             this.Server.Padding = new System.Windows.Forms.Padding(3);
-            this.Server.Size = new System.Drawing.Size(385, 408);
+            this.Server.Size = new System.Drawing.Size(385, 470);
             this.Server.TabIndex = 0;
             this.Server.Text = "Сервер";
             this.Server.UseVisualStyleBackColor = true;
@@ -132,7 +136,7 @@
             this.gbServСontrol2.Controls.Add(this.label7);
             this.gbServСontrol2.Controls.Add(this.label8);
             this.gbServСontrol2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.gbServСontrol2.Location = new System.Drawing.Point(6, 290);
+            this.gbServСontrol2.Location = new System.Drawing.Point(6, 364);
             this.gbServСontrol2.Name = "gbServСontrol2";
             this.gbServСontrol2.Size = new System.Drawing.Size(373, 103);
             this.gbServСontrol2.TabIndex = 7;
@@ -189,22 +193,26 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbServСontrol1.Controls.Add(this.tbFire);
             this.gbServСontrol1.Controls.Add(this.label9);
+            this.gbServСontrol1.Controls.Add(this.textBox5);
             this.gbServСontrol1.Controls.Add(this.tbServEsRight);
+            this.gbServСontrol1.Controls.Add(this.textBox4);
             this.gbServСontrol1.Controls.Add(this.tbServEsLeft);
             this.gbServСontrol1.Controls.Add(this.tbServRight);
             this.gbServСontrol1.Controls.Add(this.tbServLeft);
             this.gbServСontrol1.Controls.Add(this.tbServDown);
             this.gbServСontrol1.Controls.Add(this.tbServUp);
             this.gbServСontrol1.Controls.Add(this.label1);
+            this.gbServСontrol1.Controls.Add(this.label30);
             this.gbServСontrol1.Controls.Add(this.label6);
             this.gbServСontrol1.Controls.Add(this.label2);
+            this.gbServСontrol1.Controls.Add(this.label29);
             this.gbServСontrol1.Controls.Add(this.label5);
             this.gbServСontrol1.Controls.Add(this.label3);
             this.gbServСontrol1.Controls.Add(this.label4);
             this.gbServСontrol1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.gbServСontrol1.Location = new System.Drawing.Point(6, 6);
             this.gbServСontrol1.Name = "gbServСontrol1";
-            this.gbServСontrol1.Size = new System.Drawing.Size(373, 278);
+            this.gbServСontrol1.Size = new System.Drawing.Size(373, 336);
             this.gbServСontrol1.TabIndex = 6;
             this.gbServСontrol1.TabStop = false;
             this.gbServСontrol1.Text = "Управдение самолетом";
@@ -213,7 +221,7 @@
             // 
             this.tbFire.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.tbFire.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.tbFire.Location = new System.Drawing.Point(256, 233);
+            this.tbFire.Location = new System.Drawing.Point(256, 302);
             this.tbFire.Name = "tbFire";
             this.tbFire.Size = new System.Drawing.Size(100, 26);
             this.tbFire.TabIndex = 13;
@@ -225,11 +233,23 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label9.Location = new System.Drawing.Point(16, 236);
+            this.label9.Location = new System.Drawing.Point(16, 305);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(59, 20);
             this.label9.TabIndex = 12;
             this.label9.Text = "Огонь:";
+            // 
+            // textBox5
+            // 
+            this.textBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox5.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.textBox5.Location = new System.Drawing.Point(256, 268);
+            this.textBox5.Name = "textBox5";
+            this.textBox5.Size = new System.Drawing.Size(100, 26);
+            this.textBox5.TabIndex = 11;
+            this.textBox5.Tag = "rmove";
+            this.textBox5.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.textBox5.TextChanged += new System.EventHandler(this.tbServ_TextChanged);
             // 
             // tbServEsRight
             // 
@@ -242,6 +262,18 @@
             this.tbServEsRight.Tag = "esRight";
             this.tbServEsRight.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.tbServEsRight.TextChanged += new System.EventHandler(this.tbServ_TextChanged);
+            // 
+            // textBox4
+            // 
+            this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox4.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.textBox4.Location = new System.Drawing.Point(256, 234);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(100, 26);
+            this.textBox4.TabIndex = 10;
+            this.textBox4.Tag = "lmove";
+            this.textBox4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.textBox4.TextChanged += new System.EventHandler(this.tbServ_TextChanged);
             // 
             // tbServEsLeft
             // 
@@ -313,6 +345,16 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Вверх:";
             // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label30.Location = new System.Drawing.Point(16, 271);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(129, 20);
+            this.label30.TabIndex = 5;
+            this.label30.Text = "Вправо маневр:";
+            // 
             // label6
             // 
             this.label6.AutoSize = true;
@@ -332,6 +374,16 @@
             this.label2.Size = new System.Drawing.Size(50, 20);
             this.label2.TabIndex = 1;
             this.label2.Text = "Вниз:";
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label29.Location = new System.Drawing.Point(16, 237);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(121, 20);
+            this.label29.TabIndex = 4;
+            this.label29.Text = "Влево маневр:";
             // 
             // label5
             // 
@@ -369,7 +421,7 @@
             this.Game.Location = new System.Drawing.Point(4, 29);
             this.Game.Name = "Game";
             this.Game.Padding = new System.Windows.Forms.Padding(3);
-            this.Game.Size = new System.Drawing.Size(385, 408);
+            this.Game.Size = new System.Drawing.Size(385, 470);
             this.Game.TabIndex = 1;
             this.Game.Text = "Бот";
             this.Game.UseVisualStyleBackColor = true;
@@ -403,6 +455,50 @@
             this.gbGameСontrol1.TabIndex = 7;
             this.gbGameСontrol1.TabStop = false;
             this.gbGameСontrol1.Text = "Управдение самолетом в игре";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox3.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.textBox3.Location = new System.Drawing.Point(256, 301);
+            this.textBox3.MaxLength = 1;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(100, 26);
+            this.textBox3.TabIndex = 17;
+            this.textBox3.Tag = "fire";
+            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label28.Location = new System.Drawing.Point(16, 304);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(59, 20);
+            this.label28.TabIndex = 16;
+            this.label28.Text = "Огонь:";
+            // 
+            // textBox2
+            // 
+            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.textBox2.Location = new System.Drawing.Point(256, 267);
+            this.textBox2.MaxLength = 1;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(100, 26);
+            this.textBox2.TabIndex = 15;
+            this.textBox2.Tag = "flaps-prev";
+            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label27.Location = new System.Drawing.Point(16, 270);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(144, 20);
+            this.label27.TabIndex = 14;
+            this.label27.Text = "Убрать закрылки:";
             // 
             // textBox1
             // 
@@ -570,7 +666,7 @@
             this.Learning.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Learning.Location = new System.Drawing.Point(4, 29);
             this.Learning.Name = "Learning";
-            this.Learning.Size = new System.Drawing.Size(385, 408);
+            this.Learning.Size = new System.Drawing.Size(385, 470);
             this.Learning.TabIndex = 2;
             this.Learning.Text = "Обучение";
             this.Learning.UseVisualStyleBackColor = true;
@@ -683,9 +779,9 @@
             this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label18.Location = new System.Drawing.Point(17, 41);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(153, 20);
+            this.label18.Size = new System.Drawing.Size(165, 20);
             this.label18.TabIndex = 5;
-            this.label18.Text = "Захват (в секунду):";
+            this.label18.Text = "Захват/c. (не более):";
             // 
             // label23
             // 
@@ -740,55 +836,11 @@
             this.label21.TabIndex = 8;
             this.label21.Text = "{5} - Координата У";
             // 
-            // textBox2
-            // 
-            this.textBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.textBox2.Location = new System.Drawing.Point(256, 267);
-            this.textBox2.MaxLength = 1;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 26);
-            this.textBox2.TabIndex = 15;
-            this.textBox2.Tag = "flaps-prev";
-            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label27.Location = new System.Drawing.Point(16, 270);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(144, 20);
-            this.label27.TabIndex = 14;
-            this.label27.Text = "Убрать закрылки:";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.textBox3.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.textBox3.Location = new System.Drawing.Point(256, 301);
-            this.textBox3.MaxLength = 1;
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 26);
-            this.textBox3.TabIndex = 17;
-            this.textBox3.Tag = "fire";
-            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label28.Location = new System.Drawing.Point(16, 304);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(59, 20);
-            this.label28.TabIndex = 16;
-            this.label28.Text = "Огонь:";
-            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(421, 460);
+            this.ClientSize = new System.Drawing.Size(421, 522);
             this.Controls.Add(this.tabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.KeyPreview = true;
@@ -874,5 +926,9 @@
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox textBox5;
+        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.Label label29;
     }
 }

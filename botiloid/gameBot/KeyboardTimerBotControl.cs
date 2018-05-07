@@ -44,11 +44,15 @@ namespace botiloid.gameBot
 
         private Size viewPort;
         private Point scCenter; 
+
         private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
         private int currentSpeed = 100;
-
         private int lowSpeedCor = 0;
+        private bool allowSpeedCor = false;
+        private int flapsPos = 1;
+        private byte com_flapsNext, com_flapsPrev;
         private int cor_pitch = 100, cor_roll = 100, cor_yaw = 40;
+        //private int preventSwing = 0;
         private int rollStep, pitchStep;
 
         private List<byte> curKeys = new List<byte>(3);
@@ -100,6 +104,8 @@ namespace botiloid.gameBot
             com_right = (byte)gv.botKeys["right"];
             com_esRight = (byte)gv.botKeys["esRight"];
             com_esLeft = (byte)gv.botKeys["esLeft"];
+            com_flapsNext = (byte)gv.botKeys["flaps-next"];
+            com_flapsPrev = (byte)gv.botKeys["flaps-prev"];
         }
 
         /// <summary>
@@ -133,41 +139,53 @@ namespace botiloid.gameBot
         }
         private void speedCorrection(POIData poiDate, Point obj)
         {
-            if (obj.X < 10 || obj.X > viewPort.Width - 10 ||
-                            obj.Y < 10 || obj.Y > viewPort.Height - 10)
-            { poiDate.speed = 100; lowSpeedCor = 0; }
-            else
+            if (poiDate.dist > 100)
             {
-                if (poiDate.dist >= 90)
-                {
-                    poiDate.speed = 100;
-                    lowSpeedCor = 0;
-                    if (currentSpeed != 100)
-                        simpleKeyPress((byte)Keys.D0);
-                }
-                else if (poiDate.dist >= 70 && poiDate.dist < 80)
-                {
-                    poiDate.speed = 70;
-                    lowSpeedCor = 1;
-                    if (currentSpeed != 70)
-                        simpleKeyPress((byte)Keys.D7);
-                }
-                else if (poiDate.dist >= 50 && poiDate.dist < 60)
-                {
-                    poiDate.speed = 50;
-                    lowSpeedCor = 4;
-                    if (currentSpeed != 50)
-                        simpleKeyPress((byte)Keys.D5);
-                }
-                else if (poiDate.dist >= 10 && poiDate.dist < 40)
-                {
-                    poiDate.speed = 30;
-                    lowSpeedCor = 6;
-                    if (currentSpeed != 30)
-                        simpleKeyPress((byte)Keys.D3);
-                }
-                currentSpeed = poiDate.speed;
+                allowSpeedCor = false;
+                lowSpeedCor = 0;
+                if (currentSpeed != 100)
+                    simpleKeyPress((byte)Keys.D0);
+                currentSpeed = 100;
             }
+            else if (poiDate.dist > 79 && poiDate.dist < 100)
+                allowSpeedCor = true;
+            if (!allowSpeedCor)
+                return;
+
+            if (obj.X < 10 || obj.X > viewPort.Width - 10 ||
+                obj.Y < 10 || obj.Y > viewPort.Height - 10 ||
+                poiDate.dist >= 90)
+            {
+                poiDate.speed = 100;
+                lowSpeedCor = 0;
+                if (currentSpeed != 100)
+                    simpleKeyPress((byte)Keys.D0);
+            }
+            else if (poiDate.dist >= 70 && poiDate.dist < 80)
+            {
+                poiDate.speed = 70;
+                lowSpeedCor = 1;
+                if (currentSpeed != 70)
+                    simpleKeyPress((byte)Keys.D7);
+            }
+            else if (poiDate.dist >= 50 && poiDate.dist < 60)
+            {
+                poiDate.speed = 50;
+                lowSpeedCor = 4;
+                if (currentSpeed != 50)
+                    simpleKeyPress((byte)Keys.D5);
+            }
+            else if (poiDate.dist >= 10 && poiDate.dist < 40)
+            {
+                poiDate.speed = 30;
+                lowSpeedCor = 6;
+                if (currentSpeed != 30)
+                    simpleKeyPress((byte)Keys.D3);
+            }
+            currentSpeed = poiDate.speed;
+            //if (currentSpeed > 30)
+            //    flapsToPos(1);
+            //else flapsToPos(4);
         }
         private void pitchMoves(Point obj, ref string command)
         {
@@ -182,7 +200,7 @@ namespace botiloid.gameBot
                 else if (obj.Y < scCenter.Y - cor_pitch)
                 {
                     command += "up ";
-                    putOrUpdateCmd(com_down, 6 + lowSpeedCor);
+                    putOrUpdateCmd(com_down, 8 + lowSpeedCor);
                 }
             }
         }
@@ -191,18 +209,20 @@ namespace botiloid.gameBot
             if (obj.X > scCenter.X + cor_roll ||
                (obj.X > scCenter.X && obj.Y > viewPort.Height - 60))
             {
-                var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
-                               ? 2
-                               : 1;
+                var moveTime = 1;
+                //var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
+                //               ? 2
+                //               : 1;
                 command += "right" + moveTime + " ";
                 putCmd(com_right, moveTime);
             }
             else if (obj.X < scCenter.X - cor_roll ||
                      (obj.X < scCenter.X && obj.Y > viewPort.Height - 60))
             {
-                var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
-                               ? 2
-                               : 1;
+                var moveTime = 1;
+                //var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
+                //               ? 2
+                //               : 1;
                 command += "left" + moveTime + " ";
                 putCmd(com_left, moveTime);
             }
@@ -222,6 +242,19 @@ namespace botiloid.gameBot
                     putCmd(com_esLeft, 3);
                 }
             }
+        }
+
+        private void flapsToPos(int pos)
+        {
+            if (pos == flapsPos)
+                return;
+
+            if (pos > flapsPos)
+                while (flapsPos++ < pos)
+                    simpleKeyPress(com_flapsNext);
+            else
+                while (flapsPos-- > pos)
+                    simpleKeyPress(com_flapsPrev);
         }
 
         /// <summary>

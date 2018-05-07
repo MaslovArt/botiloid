@@ -1,6 +1,7 @@
 ﻿using botiloid.Subsidiary;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Threading;
@@ -17,9 +18,10 @@ namespace botiloid.gameBot
         private BotCV bc;
         private bool isRecording = false;
         private CancellationTokenSource cts;
+        private Stopwatch sw = new Stopwatch();
 
         private string filePath;
-        private int delay;
+        private int maxAllowFps;
         private string template;
         private string extention = ".txt";
 
@@ -41,7 +43,7 @@ namespace botiloid.gameBot
             gkl.KeyUp += Gkl_KeyUp;
 
             GlobalVarialbles gv = GlobalVarialbles.Constructor();
-            delay = 1000 / Convert.ToInt32(gv.learning["times"]);
+            maxAllowFps = Convert.ToInt32(gv.learning["times"]);
             template = gv.learning["template"];
             filePath = gv.learning["path"];
             com_fire = (byte)gv.botKeys["fire"];
@@ -114,14 +116,16 @@ namespace botiloid.gameBot
             Task.Run(() =>
             {
                 isRecording = true;
-                System.Media.SystemSounds.Beep.Play();
                 var cmdsBuffer = "";
                 learningData = new List<string>();
                 while (!token.IsCancellationRequested)
                 {
+                    sw.Restart();
                     var poidata = bc.detectObj();
                     Point pt = poidata == null ? new Point(-1, -1) : poidata.pt;
-                    dist = poidata.dist;
+                    dist = -1;
+                    if (poidata != null)
+                        dist = poidata.dist;
                     cmdsBuffer = String.Format(template, getPressedKeys(),
                                                          speed[1] == '0' ? "100" : speed[1] + "0",
                                                          flaps,
@@ -129,14 +133,18 @@ namespace botiloid.gameBot
                                                          pt.X, pt.Y,
                                                          dist);
                     learningData.Add(cmdsBuffer);
-                    Thread.Sleep(delay);
+
+                    sw.Stop();
+                    int fps = (int)(1000 / sw.ElapsedMilliseconds);
+                    if (fps > maxAllowFps)
+                        Thread.Sleep((1000 / fps * (fps - maxAllowFps)) / maxAllowFps);
                 }
 
                 saveLearningData();
 
                 isRecording = false;
-                System.Media.SystemSounds.Beep.Play();
             }, token);
+
             return true;
         }
 
@@ -147,6 +155,7 @@ namespace botiloid.gameBot
 
         private void saveLearningData()
         {
+            System.Media.SystemSounds.Beep.Play();
             if (learningData == null)
                 return;
 
@@ -160,6 +169,7 @@ namespace botiloid.gameBot
                 using (StreamWriter sw = new StreamWriter(fs))
                 {
                     sw.WriteLine("Game ViewPort=[" + bc.ViewPort + "];");
+                    sw.WriteLine("File lenght=[" + learningData.Count + "]");
                     sw.WriteLine("Up Down Left Right EsLeft EsRight Speed Flaps Fire Coor.X Coor.Y Distance");
                     foreach (var item in learningData)
                         sw.WriteLine(item);

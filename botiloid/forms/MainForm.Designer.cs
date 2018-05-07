@@ -50,11 +50,12 @@
             this.серверToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.подключениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.информацияПодключенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.начатьПриемToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelNoFiltDist = new System.Windows.Forms.Label();
             this.logLabel1 = new botiloid.CustomControls.LogLabel();
             this.iC_ConnectStatus = new botiloid.IndicatorControl();
             this.iC_BotStatus = new botiloid.IndicatorControl();
-            this.начатьПриемToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -82,6 +83,7 @@
             this.groupBox1.Controls.Add(this.labelfps);
             this.groupBox1.Controls.Add(this.labelSpeed);
             this.groupBox1.Controls.Add(this.labelCommand);
+            this.groupBox1.Controls.Add(this.labelNoFiltDist);
             this.groupBox1.Controls.Add(this.labelDist);
             this.groupBox1.Controls.Add(this.labelObjPoint);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -226,7 +228,7 @@
             this.настройкиToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(318, 32);
+            this.menuStrip1.Size = new System.Drawing.Size(318, 28);
             this.menuStrip1.TabIndex = 17;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -236,7 +238,7 @@
             this.ToolStripStart,
             this.ToolStripModes});
             this.ботToolStripMenuItem.Name = "ботToolStripMenuItem";
-            this.ботToolStripMenuItem.Size = new System.Drawing.Size(50, 28);
+            this.ботToolStripMenuItem.Size = new System.Drawing.Size(50, 24);
             this.ботToolStripMenuItem.Text = "Бот";
             // 
             // ToolStripStart
@@ -280,7 +282,7 @@
             this.информацияПодключенияToolStripMenuItem,
             this.начатьПриемToolStripMenuItem});
             this.серверToolStripMenuItem.Name = "серверToolStripMenuItem";
-            this.серверToolStripMenuItem.Size = new System.Drawing.Size(77, 28);
+            this.серверToolStripMenuItem.Size = new System.Drawing.Size(77, 24);
             this.серверToolStripMenuItem.Text = "Сервер";
             // 
             // подключениеToolStripMenuItem
@@ -297,12 +299,29 @@
             this.информацияПодключенияToolStripMenuItem.Text = "Информация подключения";
             this.информацияПодключенияToolStripMenuItem.Click += new System.EventHandler(this.информацияПодключенияToolStripMenuItem_Click);
             // 
+            // начатьПриемToolStripMenuItem
+            // 
+            this.начатьПриемToolStripMenuItem.Name = "начатьПриемToolStripMenuItem";
+            this.начатьПриемToolStripMenuItem.Size = new System.Drawing.Size(298, 30);
+            this.начатьПриемToolStripMenuItem.Text = "Начать прием";
+            this.начатьПриемToolStripMenuItem.Click += new System.EventHandler(this.начатьПриемToolStripMenuItem_Click);
+            // 
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(103, 28);
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(103, 24);
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.ToolStripSettings_Click);
+            // 
+            // labelNoFiltDist
+            // 
+            this.labelNoFiltDist.AutoSize = true;
+            this.labelNoFiltDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelNoFiltDist.Location = new System.Drawing.Point(209, 57);
+            this.labelNoFiltDist.Name = "labelNoFiltDist";
+            this.labelNoFiltDist.Size = new System.Drawing.Size(14, 20);
+            this.labelNoFiltDist.TabIndex = 13;
+            this.labelNoFiltDist.Text = "-";
             // 
             // logLabel1
             // 
@@ -337,13 +356,6 @@
             this.iC_BotStatus.Status = 0;
             this.iC_BotStatus.TabIndex = 8;
             this.iC_BotStatus.TabStop = false;
-            // 
-            // начатьПриемToolStripMenuItem
-            // 
-            this.начатьПриемToolStripMenuItem.Name = "начатьПриемToolStripMenuItem";
-            this.начатьПриемToolStripMenuItem.Size = new System.Drawing.Size(298, 30);
-            this.начатьПриемToolStripMenuItem.Text = "Начать прием";
-            this.начатьПриемToolStripMenuItem.Click += new System.EventHandler(this.начатьПриемToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -405,6 +417,7 @@
         private System.Windows.Forms.Label labelSpeed;
         private System.Windows.Forms.Label labelServCmd;
         private System.Windows.Forms.ToolStripMenuItem начатьПриемToolStripMenuItem;
+        private System.Windows.Forms.Label labelNoFiltDist;
     }
 }
 
