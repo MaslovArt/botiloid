@@ -43,16 +43,16 @@ namespace botiloid.gameBot
         }
 
         private Size viewPort;
-        private Point scCenter; 
+        private Point scCenter;
+        private Rectangle fireRec, frSize1, frSize2, frSize3;
 
-        private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight;
+        private byte com_up, com_down, com_left, com_right, com_esLeft, com_esRight, com_fire;
         private int currentSpeed = 100;
         private int lowSpeedCor = 0;
-        private bool allowSpeedCor = false;
         private int flapsPos = 1;
         private byte com_flapsNext, com_flapsPrev;
-        private int cor_pitch = 100, cor_roll = 100, cor_yaw = 40;
-        //private int preventSwing = 0;
+        private int cor_pitch = 80, cor_roll = 80, cor_yaw = 20;
+        private bool botSpeedChange = false, botKill = false;
         private int rollStep, pitchStep;
 
         private List<byte> curKeys = new List<byte>(3);
@@ -72,6 +72,14 @@ namespace botiloid.gameBot
             initBotCommands();
             scCenter = new Point(viewPort.Width / 2, viewPort.Height / 2);
 
+            frSize1 = new Rectangle(new Point(scCenter.X - 40, scCenter.Y - 20),
+                                    new Size(80, 40));
+            frSize2 = new Rectangle(new Point(scCenter.X - 50, scCenter.Y - 25),
+                        new Size(100, 50));
+            frSize3 = new Rectangle(new Point(scCenter.X - 60, scCenter.Y - 30),
+                        new Size(120, 60));
+            fireRec = frSize1;
+
             rollStep = viewPort.Width / 8;
             pitchStep = viewPort.Height / 5;
             timer = new System.Timers.Timer(60);
@@ -87,10 +95,10 @@ namespace botiloid.gameBot
             lock(currentCmds)
             {
                 foreach (var cmd in currentCmds)
-                    if (--cmd.times == 0)
+                    if (--cmd.times <= 0)
                         keybd_event(cmd.code, 0, KEYEVENTF_KEYUP, 0);
+                currentCmds.RemoveAll(o => o.times <= 0);
             }
-            currentCmds.RemoveAll(o => o.times == 0);
         }
 
         /// <summary>
@@ -106,6 +114,10 @@ namespace botiloid.gameBot
             com_esLeft = (byte)gv.botKeys["esLeft"];
             com_flapsNext = (byte)gv.botKeys["flaps-next"];
             com_flapsPrev = (byte)gv.botKeys["flaps-prev"];
+            com_fire = (byte)gv.botKeys["fire"];
+
+            botKill = gv.botKeys["kill"] == Keys.D1;
+            botSpeedChange = gv.botKeys["speed"] == Keys.D1;
         }
 
         /// <summary>
@@ -130,7 +142,10 @@ namespace botiloid.gameBot
 
             pitchMoves(obj, ref command);
 
-            speedCorrection(poiDate, obj);
+            if (botSpeedChange)
+                speedCorrection(poiDate, obj);
+            if (botKill)
+                fire(obj, ref command);
 
             if (command == string.Empty)
                 command = "streight";
@@ -139,18 +154,6 @@ namespace botiloid.gameBot
         }
         private void speedCorrection(POIData poiDate, Point obj)
         {
-            if (poiDate.dist > 100)
-            {
-                allowSpeedCor = false;
-                lowSpeedCor = 0;
-                if (currentSpeed != 100)
-                    simpleKeyPress((byte)Keys.D0);
-                currentSpeed = 100;
-            }
-            else if (poiDate.dist > 79 && poiDate.dist < 100)
-                allowSpeedCor = true;
-            if (!allowSpeedCor)
-                return;
 
             if (obj.X < 10 || obj.X > viewPort.Width - 10 ||
                 obj.Y < 10 || obj.Y > viewPort.Height - 10 ||
@@ -210,37 +213,42 @@ namespace botiloid.gameBot
                (obj.X > scCenter.X && obj.Y > viewPort.Height - 60))
             {
                 var moveTime = 1;
-                //var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
-                //               ? 2
-                //               : 1;
+                if (obj.X > viewPort.Width - 30 || obj.Y > viewPort.Height - 60)
+                    moveTime = 3;
                 command += "right" + moveTime + " ";
                 putCmd(com_right, moveTime);
             }
             else if (obj.X < scCenter.X - cor_roll ||
-                     (obj.X < scCenter.X && obj.Y > viewPort.Height - 60))
+                    (obj.X < scCenter.X && obj.Y > viewPort.Height - 60))
             {
                 var moveTime = 1;
-                //var moveTime = Math.Abs(scCenter.X - obj.X) / rollStep > 2
-                //               ? 2
-                //               : 1;
+                if (obj.X < 10 || obj.Y > viewPort.Height - 60)
+                    moveTime = 3;
                 command += "left" + moveTime + " ";
                 putCmd(com_left, moveTime);
             }
         }
         private void yawMoves(Point obj, ref string command)
         {
-            if (lowSpeedCor == 5)
+            if (Math.Abs(scCenter.Y - obj.Y) > 60 || lowSpeedCor < 5)
+                return;
+            if (obj.X > scCenter.X + cor_yaw && obj.X < scCenter.X + cor_roll)
             {
-                if (obj.X > scCenter.X + cor_yaw && obj.X < scCenter.X + cor_roll)
-                {
-                    command = "yaw-right ";
-                    putCmd(com_esRight, 3);
-                }
-                else if (obj.X < scCenter.X - cor_yaw && obj.X > scCenter.X - cor_roll)
-                {
-                    command = "yaw-left ";
-                    putCmd(com_esLeft, 3);
-                }
+                command = "yaw-right ";
+                putCmd(com_esRight, 3);
+            }
+            else if (obj.X < scCenter.X - cor_yaw && obj.X > scCenter.X - cor_roll)
+            {
+                command = "yaw-left ";
+                putCmd(com_esLeft, 3);
+            }
+        }
+        private void fire(Point obj, ref string command)
+        {
+            if (fireRec.Contains(obj))
+            {
+                putCmd(com_fire, 10);
+                command += " fire";
             }
         }
 

@@ -77,7 +77,7 @@ namespace botiloid
                 {
                     labelObjPoint.Text = "Obj: " + e.pt.ToString();
                     labelDist.Text = "Distance: " + e.dist.ToString();
-                    labelNoFiltDist.Text = e.noFiltDist;
+                    //labelNoFiltDist.Text = e.noFiltDist;
                     labelCommand.Text = "Command: " + e.command;
                     labelfps.Text = "fps " + e.fps.ToString();
                     if (e.speed > 0)

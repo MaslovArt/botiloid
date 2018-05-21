@@ -90,6 +90,8 @@
             this.label22 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
+            this.checkBoxKill = new System.Windows.Forms.CheckBox();
+            this.checkBoxSpeed = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.Server.SuspendLayout();
             this.gbServСontrol2.SuspendLayout();
@@ -417,6 +419,8 @@
             // 
             // Game
             // 
+            this.Game.Controls.Add(this.checkBoxSpeed);
+            this.Game.Controls.Add(this.checkBoxKill);
             this.Game.Controls.Add(this.gbGameСontrol1);
             this.Game.Location = new System.Drawing.Point(4, 29);
             this.Game.Name = "Game";
@@ -836,6 +840,30 @@
             this.label21.TabIndex = 8;
             this.label21.Text = "{5} - Координата У";
             // 
+            // checkBoxKill
+            // 
+            this.checkBoxKill.AutoSize = true;
+            this.checkBoxKill.Location = new System.Drawing.Point(25, 349);
+            this.checkBoxKill.Name = "checkBoxKill";
+            this.checkBoxKill.Size = new System.Drawing.Size(141, 24);
+            this.checkBoxKill.TabIndex = 8;
+            this.checkBoxKill.Tag = "kill";
+            this.checkBoxKill.Text = "Сбивать цель";
+            this.checkBoxKill.UseVisualStyleBackColor = true;
+            this.checkBoxKill.CheckedChanged += new System.EventHandler(this.checkBoxKill_CheckedChanged);
+            // 
+            // checkBoxSpeed
+            // 
+            this.checkBoxSpeed.AutoSize = true;
+            this.checkBoxSpeed.Location = new System.Drawing.Point(25, 379);
+            this.checkBoxSpeed.Name = "checkBoxSpeed";
+            this.checkBoxSpeed.Size = new System.Drawing.Size(183, 24);
+            this.checkBoxSpeed.TabIndex = 9;
+            this.checkBoxSpeed.Tag = "speed";
+            this.checkBoxSpeed.Text = "Изменять скорость";
+            this.checkBoxSpeed.UseVisualStyleBackColor = true;
+            this.checkBoxSpeed.CheckedChanged += new System.EventHandler(this.checkBoxKill_CheckedChanged);
+            // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -856,6 +884,7 @@
             this.gbServСontrol1.ResumeLayout(false);
             this.gbServСontrol1.PerformLayout();
             this.Game.ResumeLayout(false);
+            this.Game.PerformLayout();
             this.gbGameСontrol1.ResumeLayout(false);
             this.gbGameСontrol1.PerformLayout();
             this.Learning.ResumeLayout(false);
@@ -930,5 +959,7 @@
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label30;
         private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.CheckBox checkBoxSpeed;
+        private System.Windows.Forms.CheckBox checkBoxKill;
     }
 }

@@ -59,6 +59,8 @@ namespace botiloid.Subsidiary
             botKeys.Add("fire", Keys.X);
             botKeys.Add("flaps-next", Keys.V);
             botKeys.Add("flaps-prev", Keys.F);
+            botKeys.Add("kill", Keys.D0);
+            botKeys.Add("speed", Keys.D0);
         }
         private void initServerCmds()
         {

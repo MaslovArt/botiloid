@@ -30,6 +30,9 @@ namespace botiloid
             initTextBoxes(gbServСontrol2, gv.serverCmds);
             initTextBoxes(gbGameСontrol1, gv.botKeys);
 
+            checkBoxKill.Checked = gv.botKeys["kill"] == Keys.D1;
+            checkBoxSpeed.Checked = gv.botKeys["speed"] == Keys.D1;
+
             udTimes.Value = Convert.ToInt32(gv.learning["times"]);
             labelPath.Text = gv.learning["path"];
             template.Text = gv.learning["template"];
@@ -96,5 +99,11 @@ namespace botiloid
         }
 
         #endregion
+
+        private void checkBoxKill_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckBox cb = sender as CheckBox;
+            gv.botKeys[cb.Tag as string] = cb.Checked ? Keys.D1 : Keys.D0;
+        }
     }
 }

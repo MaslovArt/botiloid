@@ -34,6 +34,7 @@ namespace botiloid.gameBot
             try
             {
                 tess = new Emgu.CV.OCR.Tesseract(@"", "eng", OcrEngineMode.TesseractOnly);
+                tess.SetVariable("tessedit_char_whitelist", "0123456789");
             }
             catch (Exception te)
             {
@@ -106,7 +107,6 @@ namespace botiloid.gameBot
                         distReqest = 0;
                 }
                 var pd = new POIData(rec.Location, filtDist);
-                pd.noFiltDist = noFiltDist;
                 return pd;
             }
             return null;
@@ -114,7 +114,7 @@ namespace botiloid.gameBot
 
         private string recognizeSpeed(Rectangle rec, Image<Gray, byte> processedFrameSt)
         {
-            Rectangle roi = new Rectangle(new Point(rec.Location.X - 1, rec.Location.Y - 3), new Size(27, 14));
+            Rectangle roi = new Rectangle(new Point(rec.Location.X - 1, rec.Location.Y - 3), new Size(25, 14));
             var imPart = processedFrameSt;
             imPart.ROI = roi;
             imPart = imPart.Copy();
