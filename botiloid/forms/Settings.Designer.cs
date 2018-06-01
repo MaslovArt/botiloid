@@ -56,6 +56,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.Game = new System.Windows.Forms.TabPage();
+            this.checkBoxSpeed = new System.Windows.Forms.CheckBox();
+            this.checkBoxKill = new System.Windows.Forms.CheckBox();
             this.gbGameСontrol1 = new System.Windows.Forms.GroupBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.label28 = new System.Windows.Forms.Label();
@@ -77,6 +79,7 @@
             this.label16 = new System.Windows.Forms.Label();
             this.Learning = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label31 = new System.Windows.Forms.Label();
             this.template = new System.Windows.Forms.TextBox();
             this.labelPath = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -90,8 +93,8 @@
             this.label22 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
-            this.checkBoxKill = new System.Windows.Forms.CheckBox();
-            this.checkBoxSpeed = new System.Windows.Forms.CheckBox();
+            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.label32 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.Server.SuspendLayout();
             this.gbServСontrol2.SuspendLayout();
@@ -114,7 +117,7 @@
             this.tabControl.Location = new System.Drawing.Point(12, 12);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(393, 503);
+            this.tabControl.Size = new System.Drawing.Size(393, 515);
             this.tabControl.TabIndex = 0;
             // 
             // Server
@@ -124,7 +127,7 @@
             this.Server.Location = new System.Drawing.Point(4, 29);
             this.Server.Name = "Server";
             this.Server.Padding = new System.Windows.Forms.Padding(3);
-            this.Server.Size = new System.Drawing.Size(385, 470);
+            this.Server.Size = new System.Drawing.Size(385, 482);
             this.Server.TabIndex = 0;
             this.Server.Text = "Сервер";
             this.Server.UseVisualStyleBackColor = true;
@@ -138,7 +141,7 @@
             this.gbServСontrol2.Controls.Add(this.label7);
             this.gbServСontrol2.Controls.Add(this.label8);
             this.gbServСontrol2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.gbServСontrol2.Location = new System.Drawing.Point(6, 364);
+            this.gbServСontrol2.Location = new System.Drawing.Point(6, 373);
             this.gbServСontrol2.Name = "gbServСontrol2";
             this.gbServСontrol2.Size = new System.Drawing.Size(373, 103);
             this.gbServСontrol2.TabIndex = 7;
@@ -193,6 +196,8 @@
             // 
             this.gbServСontrol1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbServСontrol1.Controls.Add(this.textBox6);
+            this.gbServСontrol1.Controls.Add(this.label32);
             this.gbServСontrol1.Controls.Add(this.tbFire);
             this.gbServСontrol1.Controls.Add(this.label9);
             this.gbServСontrol1.Controls.Add(this.textBox5);
@@ -214,7 +219,7 @@
             this.gbServСontrol1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.gbServСontrol1.Location = new System.Drawing.Point(6, 6);
             this.gbServСontrol1.Name = "gbServСontrol1";
-            this.gbServСontrol1.Size = new System.Drawing.Size(373, 336);
+            this.gbServСontrol1.Size = new System.Drawing.Size(373, 361);
             this.gbServСontrol1.TabIndex = 6;
             this.gbServСontrol1.TabStop = false;
             this.gbServСontrol1.Text = "Управдение самолетом";
@@ -429,6 +434,30 @@
             this.Game.TabIndex = 1;
             this.Game.Text = "Бот";
             this.Game.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxSpeed
+            // 
+            this.checkBoxSpeed.AutoSize = true;
+            this.checkBoxSpeed.Location = new System.Drawing.Point(25, 379);
+            this.checkBoxSpeed.Name = "checkBoxSpeed";
+            this.checkBoxSpeed.Size = new System.Drawing.Size(183, 24);
+            this.checkBoxSpeed.TabIndex = 9;
+            this.checkBoxSpeed.Tag = "speed";
+            this.checkBoxSpeed.Text = "Изменять скорость";
+            this.checkBoxSpeed.UseVisualStyleBackColor = true;
+            this.checkBoxSpeed.CheckedChanged += new System.EventHandler(this.checkBoxKill_CheckedChanged);
+            // 
+            // checkBoxKill
+            // 
+            this.checkBoxKill.AutoSize = true;
+            this.checkBoxKill.Location = new System.Drawing.Point(25, 349);
+            this.checkBoxKill.Name = "checkBoxKill";
+            this.checkBoxKill.Size = new System.Drawing.Size(141, 24);
+            this.checkBoxKill.TabIndex = 8;
+            this.checkBoxKill.Tag = "kill";
+            this.checkBoxKill.Text = "Сбивать цель";
+            this.checkBoxKill.UseVisualStyleBackColor = true;
+            this.checkBoxKill.CheckedChanged += new System.EventHandler(this.checkBoxKill_CheckedChanged);
             // 
             // gbGameСontrol1
             // 
@@ -677,6 +706,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label31);
             this.groupBox1.Controls.Add(this.template);
             this.groupBox1.Controls.Add(this.labelPath);
             this.groupBox1.Controls.Add(this.label10);
@@ -694,10 +724,21 @@
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox1.Location = new System.Drawing.Point(6, 6);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(373, 322);
+            this.groupBox1.Size = new System.Drawing.Size(373, 363);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Параметры";
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label31.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.label31.Location = new System.Drawing.Point(44, 269);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(113, 20);
+            this.label31.TabIndex = 14;
+            this.label31.Text = "{7} - Ситуация";
             // 
             // template
             // 
@@ -715,7 +756,7 @@
             this.labelPath.Cursor = System.Windows.Forms.Cursors.Hand;
             this.labelPath.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelPath.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.labelPath.Location = new System.Drawing.Point(77, 284);
+            this.labelPath.Location = new System.Drawing.Point(77, 312);
             this.labelPath.MaximumSize = new System.Drawing.Size(280, 20);
             this.labelPath.Name = "labelPath";
             this.labelPath.Size = new System.Drawing.Size(60, 20);
@@ -728,7 +769,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label10.Location = new System.Drawing.Point(17, 284);
+            this.label10.Location = new System.Drawing.Point(17, 312);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(54, 20);
             this.label10.TabIndex = 1;
@@ -840,35 +881,33 @@
             this.label21.TabIndex = 8;
             this.label21.Text = "{5} - Координата У";
             // 
-            // checkBoxKill
+            // textBox6
             // 
-            this.checkBoxKill.AutoSize = true;
-            this.checkBoxKill.Location = new System.Drawing.Point(25, 349);
-            this.checkBoxKill.Name = "checkBoxKill";
-            this.checkBoxKill.Size = new System.Drawing.Size(141, 24);
-            this.checkBoxKill.TabIndex = 8;
-            this.checkBoxKill.Tag = "kill";
-            this.checkBoxKill.Text = "Сбивать цель";
-            this.checkBoxKill.UseVisualStyleBackColor = true;
-            this.checkBoxKill.CheckedChanged += new System.EventHandler(this.checkBoxKill_CheckedChanged);
+            this.textBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.textBox6.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.textBox6.Location = new System.Drawing.Point(256, 335);
+            this.textBox6.Name = "textBox6";
+            this.textBox6.Size = new System.Drawing.Size(100, 26);
+            this.textBox6.TabIndex = 15;
+            this.textBox6.Tag = "fire";
+            this.textBox6.Text = "100-110";
+            this.textBox6.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
-            // checkBoxSpeed
+            // label32
             // 
-            this.checkBoxSpeed.AutoSize = true;
-            this.checkBoxSpeed.Location = new System.Drawing.Point(25, 379);
-            this.checkBoxSpeed.Name = "checkBoxSpeed";
-            this.checkBoxSpeed.Size = new System.Drawing.Size(183, 24);
-            this.checkBoxSpeed.TabIndex = 9;
-            this.checkBoxSpeed.Tag = "speed";
-            this.checkBoxSpeed.Text = "Изменять скорость";
-            this.checkBoxSpeed.UseVisualStyleBackColor = true;
-            this.checkBoxSpeed.CheckedChanged += new System.EventHandler(this.checkBoxKill_CheckedChanged);
+            this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label32.Location = new System.Drawing.Point(16, 338);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(85, 20);
+            this.label32.TabIndex = 14;
+            this.label32.Text = "Скорость:";
             // 
             // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(421, 522);
+            this.ClientSize = new System.Drawing.Size(421, 534);
             this.Controls.Add(this.tabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.KeyPreview = true;
@@ -961,5 +1000,8 @@
         private System.Windows.Forms.Label label29;
         private System.Windows.Forms.CheckBox checkBoxSpeed;
         private System.Windows.Forms.CheckBox checkBoxKill;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.Label label32;
     }
 }

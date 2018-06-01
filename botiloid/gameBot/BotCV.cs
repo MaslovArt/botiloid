@@ -16,8 +16,12 @@ namespace botiloid.gameBot
         private ScreenCapture sc;
         private IntPtr winDiscript;
         private int distReqest = 0;
-        private string filtDist = "";
+        private int filtDist = -1;
+        private int situation;
+        private int prevDist = 0;
         private string noFiltDist = "";
+        private Rectangle recWhenBigDist = new Rectangle();
+        private bool distLess100 = false, distLess40 = false;
 
         public BotCV(IntPtr win, int Hmin, int Smin, int Vmin, int Hmax, int Smax, int Vmax)
         {
@@ -34,7 +38,7 @@ namespace botiloid.gameBot
             try
             {
                 tess = new Emgu.CV.OCR.Tesseract(@"", "eng", OcrEngineMode.TesseractOnly);
-                tess.SetVariable("tessedit_char_whitelist", "0123456789");
+                tess.SetVariable("tessedit_char_whitelist", ".0123456789");
             }
             catch (Exception te)
             {
@@ -97,44 +101,74 @@ namespace botiloid.gameBot
                 }
             }
             var rec = PointCollection.BoundingRectangle(pList.ToArray());
+            if (recWhenBigDist.IsEmpty)
+                recWhenBigDist = rec;
+
+            if (recWhenBigDist.Width - rec.Width > 3)
+                distLess100 = true;
+            else distLess100 = false;
 
             if (rec.Width > 0)
             {
                 if (++distReqest > 20)
                 {
                     filtDist = recognizeSpeed(rec, processedFrameSt);
-                    if (filtDist.Length > 1)
+                    if (filtDist > 1)
+                    {
                         distReqest = 0;
+                        if (prevDist - filtDist >= 15)
+                            situation = 1;
+                        if (Math.Abs(prevDist - filtDist) > 1 && Math.Abs(prevDist - filtDist) < 15)
+                            situation = 2;
+                        prevDist = filtDist;
+                    }
+                    else
+                    {
+                        if (distLess40)
+                            situation = 3;
+                    }
                 }
                 var pd = new POIData(rec.Location, filtDist);
+                distLess40 = filtDist < 40;
+                pd.noFiltDist = noFiltDist;
+                pd.situation = situation;
+
                 return pd;
             }
             return null;
         }
 
-        private string recognizeSpeed(Rectangle rec, Image<Gray, byte> processedFrameSt)
+        private int recognizeSpeed(Rectangle rec, Image<Gray, byte> processedFrameSt)
         {
-            Rectangle roi = new Rectangle(new Point(rec.Location.X - 1, rec.Location.Y - 3), new Size(25, 14));
+            Rectangle roi = new Rectangle(new Point(rec.Location.X, rec.Location.Y - 2), new Size(20, 14));
             var imPart = processedFrameSt;
             imPart.ROI = roi;
             imPart = imPart.Copy();
-            imPart = imPart.SmoothGaussian(1);
-            filtDist = "";
+            //imPart = imPart.SmoothGaussian(1);
+            string tempDist = "";
             if (tess != null)
             {
                 tess.SetImage(imPart);
                 tess.Recognize();
-                var t = tess.GetUTF8Text();
-                noFiltDist = t;
-                for (int i = 0; i < t.Length; i++)
+
+                noFiltDist = tess.GetUTF8Text();
+                for (int i = 0; i < noFiltDist.Length; i++)
                 {
-                    if ((int)t[i] > 47 && (int)t[i] < 58)
-                        filtDist += t[i];
+                    if ((int)noFiltDist[i] > 47 && (int)noFiltDist[i] < 58)
+                        tempDist += noFiltDist[i];
                 }
             }
             else {
-                filtDist = string.Empty;
+                return -666;
             }
+            if (tempDist.Length >= 2)
+            {
+                if (distLess100)
+                    tempDist = tempDist.Substring(0, 2);
+                filtDist = Convert.ToInt32(tempDist);
+            }
+            else filtDist = -1;
+
             return filtDist;
         }
     }

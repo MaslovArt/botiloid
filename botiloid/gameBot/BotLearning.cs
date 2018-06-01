@@ -124,14 +124,19 @@ namespace botiloid.gameBot
                     var poidata = bc.detectObj();
                     Point pt = poidata == null ? new Point(-1, -1) : poidata.pt;
                     dist = -1;
+                    int situat = 0;
                     if (poidata != null)
+                    {
                         dist = poidata.dist;
+                        situat = poidata.situation;
+                    }
                     cmdsBuffer = String.Format(template, getPressedKeys(),
                                                          speed[1] == '0' ? "100" : speed[1] + "0",
                                                          flaps,
                                                          isFire ? "1" : "0",
                                                          pt.X, pt.Y,
-                                                         dist);
+                                                         dist,
+                                                         situat);
                     learningData.Add(cmdsBuffer);
 
                     sw.Stop();
@@ -170,7 +175,7 @@ namespace botiloid.gameBot
                 {
                     sw.WriteLine("Game ViewPort=[" + bc.ViewPort + "];");
                     sw.WriteLine("File lenght=[" + learningData.Count + "]");
-                    sw.WriteLine("Up Down Left Right EsLeft EsRight Speed Flaps Fire Coor.X Coor.Y Distance");
+                    sw.WriteLine("Up Down Left Right EsLeft EsRight Speed Flaps Fire Coor.X Coor.Y Distance Situation");
                     foreach (var item in learningData)
                         sw.WriteLine(item);
                     learningData = null;

@@ -36,6 +36,7 @@
             this.labelCommand = new System.Windows.Forms.Label();
             this.labelDist = new System.Windows.Forms.Label();
             this.labelObjPoint = new System.Windows.Forms.Label();
+            this.labelNoFiltDist = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -52,7 +53,7 @@
             this.информацияПодключенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.начатьПриемToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelNoFiltDist = new System.Windows.Forms.Label();
+            this.labelSituation = new System.Windows.Forms.Label();
             this.logLabel1 = new botiloid.CustomControls.LogLabel();
             this.iC_ConnectStatus = new botiloid.IndicatorControl();
             this.iC_BotStatus = new botiloid.IndicatorControl();
@@ -79,11 +80,11 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.labelSituation);
             this.groupBox1.Controls.Add(this.labelServCmd);
             this.groupBox1.Controls.Add(this.labelfps);
             this.groupBox1.Controls.Add(this.labelSpeed);
             this.groupBox1.Controls.Add(this.labelCommand);
-            this.groupBox1.Controls.Add(this.labelNoFiltDist);
             this.groupBox1.Controls.Add(this.labelDist);
             this.groupBox1.Controls.Add(this.labelObjPoint);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -99,7 +100,7 @@
             // 
             this.labelServCmd.AutoSize = true;
             this.labelServCmd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelServCmd.Location = new System.Drawing.Point(10, 117);
+            this.labelServCmd.Location = new System.Drawing.Point(10, 137);
             this.labelServCmd.Name = "labelServCmd";
             this.labelServCmd.Size = new System.Drawing.Size(14, 20);
             this.labelServCmd.TabIndex = 17;
@@ -120,7 +121,7 @@
             // 
             this.labelSpeed.AutoSize = true;
             this.labelSpeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelSpeed.Location = new System.Drawing.Point(10, 97);
+            this.labelSpeed.Location = new System.Drawing.Point(10, 117);
             this.labelSpeed.Name = "labelSpeed";
             this.labelSpeed.Size = new System.Drawing.Size(14, 20);
             this.labelSpeed.TabIndex = 16;
@@ -155,6 +156,16 @@
             this.labelObjPoint.Size = new System.Drawing.Size(14, 20);
             this.labelObjPoint.TabIndex = 12;
             this.labelObjPoint.Text = "-";
+            // 
+            // labelNoFiltDist
+            // 
+            this.labelNoFiltDist.AutoSize = true;
+            this.labelNoFiltDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelNoFiltDist.Location = new System.Drawing.Point(225, 148);
+            this.labelNoFiltDist.Name = "labelNoFiltDist";
+            this.labelNoFiltDist.Size = new System.Drawing.Size(14, 20);
+            this.labelNoFiltDist.TabIndex = 13;
+            this.labelNoFiltDist.Text = "-";
             // 
             // groupBox2
             // 
@@ -313,15 +324,15 @@
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.ToolStripSettings_Click);
             // 
-            // labelNoFiltDist
+            // labelSituation
             // 
-            this.labelNoFiltDist.AutoSize = true;
-            this.labelNoFiltDist.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelNoFiltDist.Location = new System.Drawing.Point(209, 57);
-            this.labelNoFiltDist.Name = "labelNoFiltDist";
-            this.labelNoFiltDist.Size = new System.Drawing.Size(14, 20);
-            this.labelNoFiltDist.TabIndex = 13;
-            this.labelNoFiltDist.Text = "-";
+            this.labelSituation.AutoSize = true;
+            this.labelSituation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelSituation.Location = new System.Drawing.Point(10, 97);
+            this.labelSituation.Name = "labelSituation";
+            this.labelSituation.Size = new System.Drawing.Size(14, 20);
+            this.labelSituation.TabIndex = 19;
+            this.labelSituation.Text = "-";
             // 
             // logLabel1
             // 
@@ -366,6 +377,7 @@
             this.Controls.Add(this.iC_ConnectStatus);
             this.Controls.Add(this.iC_BotStatus);
             this.Controls.Add(this.labelClose);
+            this.Controls.Add(this.labelNoFiltDist);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.menuStrip1);
@@ -418,6 +430,7 @@
         private System.Windows.Forms.Label labelServCmd;
         private System.Windows.Forms.ToolStripMenuItem начатьПриемToolStripMenuItem;
         private System.Windows.Forms.Label labelNoFiltDist;
+        private System.Windows.Forms.Label labelSituation;
     }
 }
 

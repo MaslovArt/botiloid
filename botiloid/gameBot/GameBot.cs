@@ -184,7 +184,7 @@ namespace botiloid.gameBot
                 bc = new KeyboardTimerBotControl(cv.ViewPort);
             Task.Run(() =>
             {
-                POIData defPOI = new POIData(new Point(-1, -1), "-");
+                POIData defPOI = new POIData(new Point(-1, -1), -1);
                 while (true)
                 {
                     sw.Restart();

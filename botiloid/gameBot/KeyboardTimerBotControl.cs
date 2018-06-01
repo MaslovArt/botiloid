@@ -51,7 +51,7 @@ namespace botiloid.gameBot
         private int lowSpeedCor = 0;
         private int flapsPos = 1;
         private byte com_flapsNext, com_flapsPrev;
-        private int cor_pitch = 80, cor_roll = 80, cor_yaw = 20;
+        private int cor_pitch = 100, cor_roll = 100, cor_yaw = 20;
         private bool botSpeedChange = false, botKill = false;
         private int rollStep, pitchStep;
 
@@ -82,7 +82,7 @@ namespace botiloid.gameBot
 
             rollStep = viewPort.Width / 8;
             pitchStep = viewPort.Height / 5;
-            timer = new System.Timers.Timer(60);
+            timer = new System.Timers.Timer(70);
             timer.Elapsed += Timer_Elapsed;
             timer.Enabled = true;
         }
@@ -120,6 +120,11 @@ namespace botiloid.gameBot
             botSpeedChange = gv.botKeys["speed"] == Keys.D1;
         }
 
+        public void reInitBotCommands()
+        {
+            initBotCommands();
+        }
+
         /// <summary>
         /// Перемещается к точке
         /// </summary>
@@ -136,7 +141,7 @@ namespace botiloid.gameBot
             var obj = poiDate.pt;
             var command = string.Empty;
 
-            yawMoves(obj, ref command);
+            //yawMoves(obj, ref command);
 
             rollMoves(obj, ref command);
 
@@ -230,24 +235,24 @@ namespace botiloid.gameBot
         }
         private void yawMoves(Point obj, ref string command)
         {
-            if (Math.Abs(scCenter.Y - obj.Y) > 60 || lowSpeedCor < 5)
+            if (Math.Abs(scCenter.Y - obj.Y) > 40)
                 return;
             if (obj.X > scCenter.X + cor_yaw && obj.X < scCenter.X + cor_roll)
             {
                 command = "yaw-right ";
-                putCmd(com_esRight, 3);
+                putCmd(com_esRight, 9);
             }
             else if (obj.X < scCenter.X - cor_yaw && obj.X > scCenter.X - cor_roll)
             {
                 command = "yaw-left ";
-                putCmd(com_esLeft, 3);
+                putCmd(com_esLeft, 9);
             }
         }
         private void fire(Point obj, ref string command)
         {
             if (fireRec.Contains(obj))
             {
-                putCmd(com_fire, 10);
+                putCmd(com_fire, 18);
                 command += " fire";
             }
         }
